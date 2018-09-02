@@ -1,5 +1,4 @@
-#/usr/bin/python3
-
+# -*- coding: utf-8 -*-
 import os
 import datetime
 from ShareValueObject import *
@@ -8,12 +7,22 @@ from test_mod import *
 
 class Folder():
 
-  def __init__( self, author_id, name, description, last_update_date, register_date,release_status, share_range, share_url, thumbnail_url ):
+  def __init__( self,
+               author_id : AuthorID,
+               name : Name,
+               description : Description,
+               last_update_date : LastUpdateDate,
+               register_date : RegisterDate,
+               release_status : ReleaseStatus,
+               share_range : ShareRange,
+               share_url : ShareUrl,
+               thumbnail_url : ThumbnailUrl):
+
     self.author = AuthorID( author_id )
-    self.description = Description( description )
     self.name = Name( name )
-    self.last_update_date = LastUpdateDate( last_update_date )
+    self.description = Description( description )
     self.register_date = RegisterDate( register_date )
+    self.last_update_date = LastUpdateDate( last_update_date )
     self.release_status = ReleaseStatus( release_status )
     self.share_range = ShareRange( share_range )
     self.share_url = ShareUrl( share_url )
