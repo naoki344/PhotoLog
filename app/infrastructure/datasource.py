@@ -21,8 +21,6 @@ class DataSource():
             'host' : db_hostname,
             'database' : db_name
         }
-        folder = Folder()
-        print ( vars( folder ) )
 
     def get_db_data( self, query, parameter ):
         db = mysql.connector.connect(**self.config)
