@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from datasource import DataSource
+import folder
 
 class FolderDataSource():
     def __init__(self):
