@@ -29,5 +29,3 @@ class DataSource():
         self.data = cursor.fetchall()
         cursor.close()
         db.close()
-
-
