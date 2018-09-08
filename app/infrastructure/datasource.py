@@ -23,9 +23,10 @@ class DataSource():
         }
 
     def get_db_data( self, query, parameter ):
-        self.db = mysql.connector.connect(**self.config)
+        db = mysql.connector.connect(**self.config)
         cursor = db.cursor()
         cursor.execute(query, parameter)
-        self.data = cursor.fetchall()
+        data = cursor.fetchall()
         cursor.close()
         db.close()
+        return data
