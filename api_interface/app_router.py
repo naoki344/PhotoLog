@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 
 def application(env, start_response):
+    doc_root = '/photo_log'
     path = env['PATH_INFO']
-    if path == '/':
+    if path == doc_root + '/':
         start_response('200 OK', [('Content-type', 'text/plain')])
         return [b'Hello World']
-    elif path == '/foo':
+    elif path == doc_root + '/foo':
         start_response('200 OK', [('Content-type', 'text/plain')])
         return [b'foo']
     else:
