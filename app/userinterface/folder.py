@@ -16,8 +16,4 @@ class GetUserAllFolder():
             self.all_folder.append( folder_obj.to_dict() )
         json_txt = json.dumps( self.all_folder ,indent=4)
 
-        print ( json_txt )
-
-
-
-GetUserAllFolder(1)
+        return json_txt
