@@ -5,7 +5,7 @@ from os.path import join, dirname
 from dotenv import load_dotenv
 import mysql.connector
 
-env_file_path = join(dirname(__file__), '../.env')
+env_file_path = join(dirname(__file__), '../app/.env')
 load_dotenv(env_file_path)
 db_user     = os.environ.get("PL_DB_USER")
 db_password = os.environ.get("PL_DB_PASSWORD")

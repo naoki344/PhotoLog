@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from .datasource import DataSource
-from model.folder import Folder
-from model.folder import FolderAuthorID
+from lib.model.folder import Folder
+from lib.model.folder import FolderAuthorID
 
 class FolderDataSource():
     def __init__(self):
