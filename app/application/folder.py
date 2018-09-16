@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import sys,os
-sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/..')
-from infrastructure.folder import FolderDataSource
-from model.folder import FolderAuthorID
+#sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/..')
+from app.infrastructure.folder import FolderDataSource
+from lib.model.folder import FolderAuthorID
 
 class GetAllFolderService():
 
