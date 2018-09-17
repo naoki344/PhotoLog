@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from .datasource import DataSource
-from lib.model.folder import Folder
-from lib.model.folder import FolderAuthorID
+from lib.model.folder.folder import Folder
+from lib.model.folder.folder import FolderAuthorID
 
 class FolderDataSource():
     def __init__(self):
@@ -14,8 +14,10 @@ class FolderDataSource():
         folders = self.datasource.get_db_data(sql, parameter)
         folder_obj_list = []
         for folder_data in folders :
-            #Folder(1, None, 'name', '', datetime.datetime(2018, 9, 3, 22, 28, 49), datetime.datetime(2018, 9, 3, 22, 28, 49), 0, 0, '')
             folder_obj = Folder( *folder_data )
             folder_obj_list.append( folder_obj )
 
         return folder_obj_list
+
+
+#Folder(1, None, 'name', '', datetime.datetime(2018, 9, 3, 22, 28, 49), datetime.datetime(2018, 9, 3, 22, 28, 49), 0, 0, '')

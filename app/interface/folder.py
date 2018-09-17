@@ -1,19 +1,14 @@
 # -*- coding: utf-8 -*-
 
-import pprint
-import json
-import sys,os
-from app.application.folder import GetAllFolderService
-from lib.model.folder import FolderAuthorID
+from app.application.folder import GetUserAllFolderService
+from lib.model.folder.folder import FolderAuthorID
 
 class GetUserAllFolder():
 
     def __init__( self, folder_author_id : FolderAuthorID ):
-        self.folder = GetAllFolderService(folder_author_id)
-       	
-    def get_json(self,):
-        self.all_folder = []
-        for folder_obj in self.folder.folders :
-            self.all_folder.append( folder_obj.to_dict() )
-        json_txt = json.dumps( self.all_folder ,indent=4)
+        folder_service = GetUserAllFolderService(folder_author_id)
+        self.user_folder_list = folder_service.get_all_folder()
+
+    def get_json(self):
+        json_txt = self.user_folder_list.to_dict()
         return json_txt
