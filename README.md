@@ -7,13 +7,13 @@
 # フォルダ構成(パッケージ構成)
 ```
 PhotoLog/
-		┣ api_interface/ (ルーター・WebサーバーからのAPIリクエストを受け付けappのuserinterfaceを呼び出す:uWSGI依存)
-		┣ app/
-		┃	┣ userinterface/ (ユーザーインターフェース層：api_interfaceから呼ばれapplicationにアクセスする)
-		┃	┣ application/ (アプリケーション層)
-		┃	┗ infrastructure/ (インフラストラクチャー層)
-		┗ lib/
-			┗ model/ (モデルが集約されている)
+        ┣ api_interface/ (ルーター・WebサーバーからのAPIリクエストを受け付けappのuserinterfaceを呼び出す:uWSGI依存)
+        ┣ app/
+        ┃       ┣ userinterface/ (ユーザーインターフェース層：api_interfaceから呼ばれapplicationにアクセスする)
+        ┃       ┣ application/ (アプリケーション層)
+        ┃       ┗ infrastructure/ (インフラストラクチャー層)
+        ┗ lib/
+                ┗ model/ (モデルが集約されている)
 ```
 <!--
 フォルダ構成図制作用記号
