@@ -7,6 +7,12 @@ from flask import Blueprint
 
 app_folder = Blueprint('app_folder',__name__)
 
+
+#main で登録されているPATHからの相対パスで以下のURLを指定する
+#  以下の場合のPATHは、/photo_log/folder/file になる
+#  - main.py のregister_blueprint が url_prefix='/photo_log/folder'
+#  - @app_folder.route('/file')
+
 @app_folder.route('/')
 def folder_index():
     folder_author_id = 1
