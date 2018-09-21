@@ -9,9 +9,11 @@ from lib.model.folder.folder import FolderAuthorID
 class GetUserAllFolderService():
 
     def __init__( self, folder_author_id : FolderAuthorID ):
-        folderdata = FolderDataSource()
-        folders = folderdata.get_all_folder(folder_author_id)
-        self.user_folder_list = UserFolderList(folders)
+        self.folder_author_id = folder_author_id
+        self.folder_datasource = FolderDataSource()
 
     def get_all_folder(self):
-        return self.user_folder_list
+        folders = self.folder_datasource.get_all_folder(self.folder_author_id)
+        user_folder_list = UserFolderList(folders)
+        json_txt = user_folder_list.to_dict()
+        return json_txt

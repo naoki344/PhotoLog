@@ -2,13 +2,14 @@
 
 from app.application.folder import GetUserAllFolderService
 from lib.model.folder.folder import FolderAuthorID
+from flask import Blueprint
 
-class GetUserAllFolder():
 
-    def __init__( self, folder_author_id : FolderAuthorID ):
-        folder_service = GetUserAllFolderService(folder_author_id)
-        self.user_folder_list = folder_service.get_all_folder()
+app_folder = Blueprint('app_folder',__name__)
 
-    def get_json(self):
-        json_txt = self.user_folder_list.to_dict()
-        return json_txt
+@app_folder.route('/')
+def folder_index():
+    folder_author_id = 1
+    folder_service = GetUserAllFolderService(folder_author_id)
+    json_txt = folder_service.get_all_folder()
+    return json_txt.encode("UTF-8")
