@@ -4,7 +4,7 @@ import json
 import datetime
 from lib.model.folder.folder import Folder
 
-class UserFolderList():
+class FolderList():
 
     def __init__( self, folder_obj_list ):
         self.uset_folder_list = folder_obj_list
