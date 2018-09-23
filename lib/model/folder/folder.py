@@ -79,7 +79,7 @@ Value Object : ShareRange
 class FolderShareRange(Enum):
   NONE = 0
   PRIVATE = 1
-  PUBLICK = 2
+  PUBLIC = 2
   PASSFRASE = 3
 
 
