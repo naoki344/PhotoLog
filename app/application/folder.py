@@ -31,20 +31,27 @@ class FolderCommandService():
     def __init__( self ):
         self.folder_datasource = FolderDataSource()
 
-    def register_folder( self, post_data ):
+    def register_folder(self,
+        author_id,
+        name,
+        description,
+        release_status,
+        share_range,
+        share_url,
+        thumbnail_url ):
+
         folder = Folder(
             '',
-            int(post_data["author_ID"]),
-            post_data["name"],
-            post_data["description"],
+            int(author_id),
+            name,
+            description,
             '',
             '',
-            int(post_data["release_status"]),
-            int(post_data["share_range"]),
-            post_data["share_url"],
-            post_data["thumbnail_url"],
-            0,
-        )
+            int(release_status),
+            int(share_range),
+            share_url,
+            thumbnail_url,
+            0 )
         folder_obj = self.folder_datasource.register_folder( folder )
         folder_dict = folder_obj.to_dict()
         json_txt = json.dumps( folder_dict ,indent=4)

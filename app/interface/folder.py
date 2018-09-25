@@ -28,5 +28,14 @@ def folder_index():
         post_data = request.form
         json_txt = json.dumps( post_data ,indent=4)
         folder_service = FolderCommandService()
-        json_txt = folder_service.register_folder(post_data)
+        data = [
+            post_data["author_id"],
+            post_data["name"],
+            post_data["description"],
+            post_data["release_status"],
+            post_data["share_range"],
+            post_data["share_url"],
+            post_data["thumbnail_url"],
+        ]
+        json_txt = folder_service.register_folder(*data)
         return json_txt.encode("UTF-8")
