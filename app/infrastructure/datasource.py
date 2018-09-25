@@ -22,18 +22,26 @@ class DataSource():
             'database' : db_name
         }
 
-    def get_db_data( self, query, parameter ):
+    def get_db_data( self, query, parameter, dict_flag ):
         db = mysql.connector.connect(**self.config)
-        cursor = db.cursor()
+        if dict_flag == True :
+            cursor = db.cursor(dictionary=True)
+        else :
+            cursor = db.cursor()
+
         cursor.execute(query, parameter)
         data = cursor.fetchall()
         cursor.close()
         db.close()
         return data
 
-    def insert_db( self, query, parameter ):
+    def insert_db( self, query, parameter, dict_flag ):
         db = mysql.connector.connect(**self.config)
-        cursor = db.cursor()
+        if dict_flag == True :
+            cursor = db.cursor(dictionary=True)
+        else :
+            cursor = db.cursor()
+
         try:
             data = cursor.execute(query, parameter)
             get_id_query = 'SELECT LAST_INSERT_ID();'
