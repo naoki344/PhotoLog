@@ -40,16 +40,4 @@ def folder_index():
 #    "share_url" : "https://share_url.html",
 #    "thumbnail_url" : "https://thumbnail_url.png",
 #}
-#{
-#   folder_id : FolderID,
-#   author_id : FolderAuthorID,
-#   name : FolderName,
-#   description : FolderDescription,
-#   last_update_date : FolderLastUpdateDate,
-#   register_date : FolderRegisterDate,
-#   release_status : FolderReleaseStatus,
-#   share_range : FolderShareRange,
-#   share_url : FolderShareUrl,
-#   thumbnail_url : FolderThumbnailUrl):
-#}
-        #folder = Folder('', 1, 'foldername', 'comment folder', datetime.datetime(2018, 9, 3, 22, 28, 49), datetime.datetime(2018, 9, 3, 22, 28, 49), 0, 0, 'https://share_url.html', 'https://thumbnail_url.png')
+        #folder = Folder('', 1, 'foldername', 'comment folder', datetime.datetime(2018, 9, 3, 22, 28, 49), datetime.datetime(2018, 9, 3, 22, 28, 49), 0, 0, 'https://share_url.html', 'https://thumbnail_url.png', '')

@@ -9,7 +9,7 @@ class FolderDataSource():
         self.datasource = DataSource()
 
     def get_all_folder(self, folder_author_id : FolderAuthorID ):
-        sql = 'SELECT * FROM folder WHERE author_ID=%s ;'
+        sql = 'SELECT * FROM folder WHERE author_id=%s;'
         parameter = [folder_author_id]
         folders = self.datasource.get_db_data(sql, parameter)
         folder_obj_list = []
@@ -21,7 +21,7 @@ class FolderDataSource():
 
 
     def register_folder(self, folder : Folder ):
-        sql = 'INSERT INTO folder(author_ID,name,description,release_status,share_range,share_url,thumbnail_url) VALUES(%s,%s,%s,%s,%s,%s,%s) ;'
+        sql = 'INSERT INTO folder(author_id,name,description,release_status,share_range,share_url,thumbnail_url) VALUES(%s,%s,%s,%s,%s,%s,%s) ;'
         parameter = [
             folder.author_id.value,
             folder.name.value,

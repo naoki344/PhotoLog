@@ -22,8 +22,8 @@ config = {
 db = mysql.connector.connect(**config)
 sql = """
     CREATE TABLE IF NOT EXISTS folder (
-        folder_ID BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-        author_ID int DEFAULT NULL,
+        folder_id BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+        author_id int DEFAULT NULL,
         name varchar(50) NOT NULL DEFAULT '',
         description varchar(500) NOT NULL DEFAULT '',
         register_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -31,7 +31,8 @@ sql = """
         release_status INT NOT NULL DEFAULT 0,
         share_range INT NOT NULL DEFAULT 0,
         share_url VARCHAR(8190) NOT NULL DEFAULT '',
-        thumbnail_url VARCHAR(8190) NOT NULL DEFAULT ''
+        thumbnail_url VARCHAR(8190) NOT NULL DEFAULT '',
+        delete_flag INT NOT NULL DEFAULT 0
     );"""
 cursor = db.cursor()
 cursor.execute(sql)
@@ -39,8 +40,8 @@ cursor.close()
 
 sql = """
     CREATE TABLE IF NOT EXISTS page (
-        page_ID BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-        author_ID int DEFAULT NULL,
+        page_id BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+        author_id int DEFAULT NULL,
         name varchar(50) NOT NULL DEFAULT '',
         description varchar(500) NOT NULL DEFAULT '',
         register_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -48,7 +49,8 @@ sql = """
         release_status INT NOT NULL DEFAULT 0,
         share_range INT NOT NULL DEFAULT 0,
         share_url VARCHAR(8190) NOT NULL DEFAULT '',
-        thumbnail_url VARCHAR(8190) NOT NULL DEFAULT ''
+        thumbnail_url VARCHAR(8190) NOT NULL DEFAULT '',
+        delete_flag INT NOT NULL DEFAULT 0
     );"""
 cursor = db.cursor()
 cursor.execute(sql)
@@ -57,8 +59,8 @@ cursor.close()
 
 sql = """
     CREATE TABLE IF NOT EXISTS album (
-        album_ID BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-        author_ID int DEFAULT NULL,
+        album_id BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+        author_id int DEFAULT NULL,
         name varchar(50) NOT NULL DEFAULT '',
         description varchar(500) NOT NULL DEFAULT '',
         register_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -66,7 +68,8 @@ sql = """
         release_status INT NOT NULL DEFAULT 0,
         share_range INT NOT NULL DEFAULT 0,
         share_url VARCHAR(8190) NOT NULL DEFAULT '',
-        thumbnail_url VARCHAR(8190) NOT NULL DEFAULT ''
+        thumbnail_url VARCHAR(8190) NOT NULL DEFAULT '',
+        delete_flag INT NOT NULL DEFAULT 0
     );"""
 cursor = db.cursor()
 cursor.execute(sql)

@@ -98,6 +98,14 @@ class FolderThumbnailUrl:
   def __init__( self,thumbnail_url ):
     self.value = thumbnail_url
 
+'''
+Value Object : DeleteFlag
+'''
+class FolderDeleteFlag(Enum):
+  NONE = 0
+  DELETED = 1
+
+
 class Folder():
 
     def __init__( self,
@@ -110,7 +118,8 @@ class Folder():
         release_status : FolderReleaseStatus,
         share_range : FolderShareRange,
         share_url : FolderShareUrl,
-        thumbnail_url : FolderThumbnailUrl):
+        thumbnail_url : FolderThumbnailUrl,
+        delete_flag : FolderDeleteFlag):
 
         self.id = FolderID( folder_id )
         self.author_id = FolderAuthorID( author_id )
@@ -122,6 +131,7 @@ class Folder():
         self.share_range = FolderShareRange( share_range )
         self.share_url = FolderShareUrl( share_url )
         self.thumbnail_url = FolderThumbnailUrl( thumbnail_url )
+        self.delete_flag = FolderDeleteFlag( delete_flag )
 
     def to_dict(self) :
         return {
@@ -135,4 +145,5 @@ class Folder():
             "share_range" : self.share_range.value,
             "share_url" : self.share_url.value,
             "thumbnail_url" : self.thumbnail_url.value,
+            "delete_flag" : self.delete_flag.value,
         }

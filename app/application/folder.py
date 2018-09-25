@@ -43,6 +43,7 @@ class FolderCommandService():
             int(post_data["share_range"]),
             post_data["share_url"],
             post_data["thumbnail_url"],
+            0,
         )
         folder_obj = self.folder_datasource.register_folder( folder )
         folder_dict = folder_obj.to_dict()
