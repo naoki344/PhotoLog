@@ -30,3 +30,22 @@ class DataSource():
         cursor.close()
         db.close()
         return data
+
+    def insert_db( self, query, parameter ):
+        db = mysql.connector.connect(**self.config)
+        cursor = db.cursor()
+        try:
+            data = cursor.execute(query, parameter)
+            get_id_query = 'SELECT LAST_INSERT_ID();'
+            parameter = []
+            cursor.execute(get_id_query, parameter)
+            data = cursor.fetchall()
+            db.commit()
+            row_id = data[0][0]
+        except:
+            db.rollback()
+            raise
+
+        cursor.close()
+        db.close()
+        return row_id
