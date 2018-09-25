@@ -30,14 +30,3 @@ def folder_index():
         folder_service = FolderCommandService()
         json_txt = folder_service.register_folder(post_data)
         return json_txt.encode("UTF-8")
-
-#post_data = {
-#    "author_ID" : 4,
-#    "name" : "folder_name",
-#    "description" : "memo",
-#    "release_status" : 2,
-#    "share_range" : 1,
-#    "share_url" : "https://share_url.html",
-#    "thumbnail_url" : "https://thumbnail_url.png",
-#}
-        #folder = Folder('', 1, 'foldername', 'comment folder', datetime.datetime(2018, 9, 3, 22, 28, 49), datetime.datetime(2018, 9, 3, 22, 28, 49), 0, 0, 'https://share_url.html', 'https://thumbnail_url.png', '')

@@ -49,7 +49,7 @@ class DataSource():
             cursor.execute(get_id_query, parameter)
             data = cursor.fetchall()
             db.commit()
-            row_id = data[0][0]
+            row_id = data[0]["LAST_INSERT_ID()"]
         except:
             db.rollback()
             raise
