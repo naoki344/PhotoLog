@@ -16,7 +16,7 @@ app_folder = Blueprint('app_folder',__name__)
 #  - main.py のregister_blueprint が url_prefix='/photo_log/folder'
 #  - @app_folder.route('/file')
 
-@app_folder.route( '/', methods=['POST','GET'] )
+@app_folder.route( '/', methods=['POST','GET','PUT','DELETE'] )
 def folder_index():
     if request.method == 'GET':
         folder_author_id = 1
@@ -39,3 +39,13 @@ def folder_index():
         ]
         json_txt = folder_service.register_folder(*data)
         return json_txt.encode("UTF-8")
+
+    if request.method == 'PUT':
+        pass
+
+    if request.method == 'DELETE':
+        post_data = request.form
+        folder_id = post_data["folder_id"]
+        folder_service = FolderCommandService()
+        ret = folder_service.delete_folder( folder_id )
+        return ret.encode("UTF-8")

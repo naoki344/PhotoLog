@@ -57,3 +57,22 @@ class DataSource():
         cursor.close()
         db.close()
         return row_id
+
+    def update_db_data( self, query, parameter, dict_flag ):
+        db = mysql.connector.connect(**self.config)
+        print( parameter )
+        if dict_flag == True :
+            cursor = db.cursor(dictionary=True)
+        else :
+            cursor = db.cursor()
+
+        try:
+            data = cursor.execute(query, parameter)
+            db.commit()
+        except:
+            db.rollback()
+            raise
+
+        cursor.close()
+        db.close()
+        return True

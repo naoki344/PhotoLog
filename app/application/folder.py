@@ -56,3 +56,12 @@ class FolderCommandService():
         folder_dict = folder_obj.to_dict()
         json_txt = json.dumps( folder_dict ,indent=4)
         return json_txt
+
+    def delete_folder(self, folder_id):
+        try :
+            folder_obj = self.folder_datasource.delete_folder( int(folder_id) )
+        except:
+            msg = 'folder['+ folder_id +'] delete is failuer'
+            return msg
+
+        return folder_id

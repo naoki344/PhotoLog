@@ -3,6 +3,7 @@
 from .datasource import DataSource
 from lib.model.folder.folder import Folder
 from lib.model.folder.folder import FolderAuthorID
+from lib.model.folder.folder import FolderDeleteFlag
 
 class FolderDataSource():
     def __init__(self):
@@ -63,3 +64,15 @@ class FolderDataSource():
             folder_row["delete_flag"],
         )
         return folder_obj
+
+
+    def delete_folder(self, folder_id ):
+        del_flag = FolderDeleteFlag.DELETED.value
+        sql = 'UPDATE folder SET delete_flag=%s WHERE folder_id=%s;'
+        parameter = [ del_flag, folder_id ]
+        try :
+            ret_status = self.datasource.update_db_data(sql, parameter, True)
+        except:
+            raise
+
+        return True
