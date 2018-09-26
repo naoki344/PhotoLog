@@ -121,7 +121,7 @@ class Folder():
         thumbnail_url : FolderThumbnailUrl,
         delete_flag : FolderDeleteFlag):
 
-        self.id = FolderID( folder_id )
+        self.folder_id = FolderID( folder_id )
         self.author_id = FolderAuthorID( author_id )
         self.name = FolderName( name )
         self.description = FolderDescription( description )
@@ -135,7 +135,7 @@ class Folder():
 
     def to_dict(self) :
         return {
-            "folder_id" : self.id.value,
+            "folder_id" : self.folder_id.value,
             "author_id" : self.author_id.value,
             "name" : self.name.value,
             "description" : self.description.value,

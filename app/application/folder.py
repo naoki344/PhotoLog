@@ -23,7 +23,9 @@ class FolderQueryService():
         return json_txt
 
     def find_folder(self, folder_id : FolderID ):
-        pass
+        folder_obj = self.folder_datasource.find_folder(folder_id)
+        folder_dict = folder_obj.to_dict()
+        json_txt = json.dumps( folder_dict ,indent=4)
 
 
 class FolderCommandService():
@@ -56,6 +58,34 @@ class FolderCommandService():
         folder_dict = folder_obj.to_dict()
         json_txt = json.dumps( folder_dict ,indent=4)
         return json_txt
+
+    def update_folder(self,
+        folder_id,
+        author_id,
+        name,
+        description,
+        release_status,
+        share_range,
+        share_url,
+        thumbnail_url ):
+
+        folder = Folder(
+            int(folder_id),
+            int(author_id),
+            name,
+            description,
+            '',
+            '',
+            int(release_status),
+            int(share_range),
+            share_url,
+            thumbnail_url,
+            0 )
+        folder_obj = self.folder_datasource.update_folder( folder )
+        folder_dict = folder_obj.to_dict()
+        json_txt = json.dumps( folder_dict ,indent=4)
+        return json_txt
+
 
     def delete_folder(self, folder_id):
         try :

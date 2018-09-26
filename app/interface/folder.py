@@ -41,9 +41,24 @@ def folder_index():
         return json_txt.encode("UTF-8")
 
     if request.method == 'PUT':
-        pass
+        post_data = request.form
+        json_txt = json.dumps( post_data ,indent=4)
+        folder_service = FolderCommandService()
+        data = [
+            post_data["folder_id"],
+            post_data["author_id"],
+            post_data["name"],
+            post_data["description"],
+            post_data["release_status"],
+            post_data["share_range"],
+            post_data["share_url"],
+            post_data["thumbnail_url"],
+        ]
+        json_txt = folder_service.update_folder(*data)
+        return json_txt.encode("UTF-8")
 
     if request.method == 'DELETE':
+        #deleteも一度folder オブジェクトを作成した後に削除（update)した方が良い？->削除条件とか出てきた時にその対応がしやすそう can_delete()的な
         post_data = request.form
         folder_id = post_data["folder_id"]
         folder_service = FolderCommandService()
