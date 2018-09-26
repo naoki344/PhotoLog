@@ -60,7 +60,6 @@ class DataSource():
 
     def update( self, query, parameter, dict_flag ):
         db = mysql.connector.connect(**self.config)
-        print( parameter )
         if dict_flag == True :
             cursor = db.cursor(dictionary=True)
         else :

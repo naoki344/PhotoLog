@@ -5,8 +5,9 @@ from lib.model.folder.folder import Folder
 from lib.model.folder.folder import FolderID
 from lib.model.folder.folder import FolderAuthorID
 from lib.model.folder.folder import FolderDeleteFlag
+from lib.model.folder.folder_repositories import FolderRepositories
 
-class FolderDataSource():
+class FolderDataSource(FolderRepositories):
     def __init__(self):
         self.datasource = DataSource()
 
@@ -76,7 +77,7 @@ class FolderDataSource():
         return folder_obj
 
 
-    def delete_folder(self, folder_id ):
+    def delete_folder(self, folder_id : FolderID ):
         del_flag = FolderDeleteFlag.DELETED.value
         sql = 'UPDATE folder SET delete_flag=%s WHERE folder_id=%s;'
         parameter = [ del_flag, folder_id ]
