@@ -22,7 +22,7 @@ class DataSource():
             'database' : db_name
         }
 
-    def get_db_data( self, query, parameter, dict_flag ):
+    def get( self, query, parameter, dict_flag ):
         db = mysql.connector.connect(**self.config)
         if dict_flag == True :
             cursor = db.cursor(dictionary=True)
@@ -35,7 +35,7 @@ class DataSource():
         db.close()
         return data
 
-    def insert_db( self, query, parameter, dict_flag ):
+    def insert( self, query, parameter, dict_flag ):
         db = mysql.connector.connect(**self.config)
         if dict_flag == True :
             cursor = db.cursor(dictionary=True)
@@ -58,7 +58,7 @@ class DataSource():
         db.close()
         return row_id
 
-    def update_db_data( self, query, parameter, dict_flag ):
+    def update( self, query, parameter, dict_flag ):
         db = mysql.connector.connect(**self.config)
         print( parameter )
         if dict_flag == True :
