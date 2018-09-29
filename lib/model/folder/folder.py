@@ -12,9 +12,6 @@ class FolderID:
     def __init__(self, folder_id):
         self.value = folder_id
 
-    def __check_exist_user(self):
-        return True
-
 
 '''
 Value Object : AuthorID
@@ -24,9 +21,6 @@ Value Object : AuthorID
 class FolderAuthorID:
     def __init__(self, user_id):
         self.value = user_id
-
-    def __check_exist_user(self):
-        return True
 
 
 '''
@@ -60,10 +54,10 @@ Value Object : LastUpdateDate
 
 
 class FolderLastUpdateDate:
-    def __init__(self, date):
+    def __init__(self, date=None):
         self.value = date
 
-    def datetime_string():
+    def datetime_string(self):
         return datetime.fromtimestamp(self.value).isoformat()
 
 
@@ -73,10 +67,10 @@ Value Object : RegisterDate
 
 
 class FolderRegisterDate:
-    def __init__(self, date):
+    def __init__(self, date=None):
         self.value = date
 
-    def datetime_string():
+    def datetime_string(self):
         return datetime.fromtimestamp(self.value).isoformat()
 
 
@@ -133,7 +127,7 @@ class FolderDeleteFlag(Enum):
     DELETED = 1
 
 
-class Folder():
+class Folder:
     def __init__(self, folder_id: FolderID, author_id: FolderAuthorID,
                  name: FolderName, description: FolderDescription,
                  last_update_date: FolderLastUpdateDate,
@@ -161,9 +155,9 @@ class Folder():
             "author_id": self.author_id.value,
             "name": self.name.value,
             "description": self.description.value,
-            "register_date": self.register_date.value.isoformat(),
+            "register_date": self.register_date.datetime_string(),
             "last_update_date": self.last_update_date.datetime_string(),
-            "release_status": self.release_status.datetime_string(),
+            "release_status": self.release_status.value,
             "share_range": self.share_range.value,
             "share_url": self.share_url.value,
             "thumbnail_url": self.thumbnail_url.value,
@@ -175,3 +169,21 @@ class Folder():
 
     def can_update(self):
         return True
+
+    @staticmethod
+    def from_dict(self, dict_data: dict) -> 'Folder':
+        data = [
+            FolderID(dict_data["folder_id"]),
+            FolderAuthorID(dict_data["author_id"]),
+            FolderName(dict_data["name"]),
+            FolderDescription(dict_data["description"]),
+            FolderLastUpdateDate(dict_data["last_update_date"]),
+            FolderRegisterDate(dict_data['register_date']),
+            FolderReleaseStatus(dict_data["release_status"]),
+            FolderShareRange(dict_data["share_range"]),
+            FolderShareUrl(dict_data["share_url"]),
+            FolderThumbnailUrl(dict_data["thumbnail_url"]),
+            FolderDeleteFlag(dict_data["delete_flag"]),
+        ]
+        folder_obj = Folder(*data)
+        return folder_obj
