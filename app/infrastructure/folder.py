@@ -14,7 +14,7 @@ class FolderDataSource(FolderRepository):
         self.datasource = DataSource()
 
     def find_user_all(self, folder_author_id: FolderAuthorID):
-        sql = 'SELECT * FROM folder WHERE author_id=%s AND delete_flag=0;'
+        sql = 'SELECT folder_id,author_id,name,description,unix_timestamp(last_update_date),unix_timestamp(register_date),release_status,share_range,share_url,thumbnail_url FROM folder WHERE author_id=%s AND delete_flag=0;'
         parameter = [folder_author_id]
         folders = self.datasource.get(sql, parameter, True)
         folder_obj_list = []
@@ -25,7 +25,7 @@ class FolderDataSource(FolderRepository):
         return folder_obj_list
 
     def find(self, folder_id: FolderID):
-        sql = 'SELECT * FROM folder WHERE folder_id=%s;'
+        sql = 'SELECT folder_id,author_id,name,description,unix_timestamp(last_update_date),unix_timestamp(register_date),release_status,share_range,share_url,thumbnail_url FROM folder WHERE WHERE folder_id=%s;'
         parameter = [folder_id]
         folders = self.datasource.get(sql, parameter, True)
         folder_row = folders[0]
@@ -36,21 +36,16 @@ class FolderDataSource(FolderRepository):
         return folder_obj
 
     def register(self, folder: Folder):
-        sql = 'INSERT INTO folder(author_id,name,description,release_status,share_range,share_url,thumbnail_url) VALUES(%s,%s,%s,%s,%s,%s,%s) ;'
+        sql = 'INSERT INTO folder(folder_id,author_id,name,description,release_status,share_range,share_url,thumbnail_url) VALUES(%s,%s,%s,%s,%s,%s,%s,%s) ;'
         parameter = [
-            folder.author_id.value, folder.name.value,
+            folder.folder_id.value, folder.author_id.value, folder.name.value,
             folder.description.value, folder.release_status.value,
             folder.share_range.value, folder.share_url.value,
             folder.thumbnail_url.value
         ]
         folder_id = self.datasource.insert(sql, parameter, True)
 
-        sql = 'SELECT * FROM folder WHERE folder_ID=%s'
-        parameter = [folder_id]
-        folders = self.datasource.get(sql, parameter, True)
-        folder_row = folders[0]
-        folder_obj = self._to_folder_obj(folder_row)
-        return folder_obj
+        return True
 
     def update(self, folder: Folder):
         sql = 'UPDATE folder SET author_id=%s,name=%s,description=%s,release_status=%s,share_range=%s,share_url=%s,thumbnail_url=%s WHERE folder_id=%s;'
@@ -82,17 +77,5 @@ class FolderDataSource(FolderRepository):
         return True
 
     def _to_folder_obj(self, folder_row):
-        folder_obj = Folder(
-            folder_row["folder_id"],
-            folder_row["author_id"],
-            folder_row["name"],
-            folder_row["description"],
-            folder_row["register_date"],
-            folder_row["last_update_date"],
-            folder_row["release_status"],
-            folder_row["share_range"],
-            folder_row["share_url"],
-            folder_row["thumbnail_url"],
-            folder_row["delete_flag"],
-        )
+        folder_obj = Folder.from_dict(folder_row)
         return folder_obj
