@@ -5,7 +5,7 @@ from lib.model.folder.folder import Folder
 from lib.model.folder.folder import FolderID
 from lib.model.folder.folder import FolderAuthorID
 
-class FolderRepositories(metaclass=ABCMeta):
+class FolderRepository(metaclass=ABCMeta):
 
     @abstractmethod
     def get_all_folder(self, folder_author_id : FolderAuthorID ):
