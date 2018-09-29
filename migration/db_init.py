@@ -41,7 +41,7 @@ cursor.close()
 
 sql = """
     CREATE TABLE IF NOT EXISTS page (
-        page_id  varchar(100) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+        page_id varchar(100) PRIMARY KEY NOT NULL,
         author_id varchar(100) DEFAULT NULL,
         name varchar(50) NOT NULL DEFAULT '',
         description varchar(500) NOT NULL DEFAULT '',
@@ -59,7 +59,7 @@ cursor.close()
 
 sql = """
     CREATE TABLE IF NOT EXISTS album (
-        album_id varchar(100) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+        album_id varchar(100) PRIMARY KEY NOT NULL,
         author_id varchar(100) DEFAULT NULL,
         name varchar(50) NOT NULL DEFAULT '',
         description varchar(500) NOT NULL DEFAULT '',
