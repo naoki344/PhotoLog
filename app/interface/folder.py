@@ -43,7 +43,7 @@ def folder_index():
 
     if request.method == 'PUT':
         post_data = request.form
-        folder_id = int(post_data["folder_id"])
+        folder_id = post_data["folder_id"]
         recive_data = _to_folder_dict(post_data)
 
         folder_factory = FolderFactory()
@@ -61,7 +61,7 @@ def folder_index():
 
     if request.method == 'DELETE':
         post_data = request.form
-        folder_id = int(post_data["folder_id"])
+        folder_id = post_data["folder_id"]
 
         folder_query_service = FolderQueryService()
         org_folder = folder_query_service.find(folder_id)
@@ -73,22 +73,35 @@ def folder_index():
         return ret.encode("UTF-8")
 
 
-def _to_folder_dict(self, post_data) -> Folder:
-    if post_data['folder_id'] == None :
-        post_data['folder_id'] = ''
+def _to_folder_dict(post_data) -> Folder:
+    data = {}
+    if post_data.get('folder_id') == None :
+        data['folder_id'] = ''
+    else:
+        data['folder_id'] = post_data['folder_id']
 
-    if post_data['delete_flag'] == None :
-        post_data['delete_flag'] = 0
+    if post_data.get('delete_flag') == None :
+        data['delete_flag'] = 0
+    else:
+        data['delete_flag'] = post_data['delete_flag']
 
-    dict_data = [
-        int(post_data["folder_id"]),
-        int(post_data["author_id"]),
-        post_data["name"],
-        post_data["description"],
-        int(post_data["release_status"]),
-        int(post_data["share_range"]),
-        post_data["share_url"],
-        post_data["thumbnail_url"],
-        int(post_data["delete_flag"]),
-    ]
+    data['author_id'] = post_data['author_id']
+    data['name'] = post_data['name']
+    data['description'] = post_data['description']
+    data['release_status'] = post_data['release_status']
+    data['share_range'] = post_data['share_range']
+    data['share_url'] = post_data['share_url']
+    data['thumbnail_url'] = post_data['thumbnail_url']
+
+    dict_data = {
+        "folder_id": data["folder_id"],
+        "author_id": data["author_id"],
+        "name": data["name"],
+        "description": data["description"],
+        "release_status": int(data["release_status"]),
+        "share_range": int(data["share_range"]),
+        "share_url": data["share_url"],
+        "thumbnail_url": data["thumbnail_url"],
+        "delete_flag": int(data["delete_flag"]),
+    }
     return dict_data
