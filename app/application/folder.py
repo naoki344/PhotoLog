@@ -36,8 +36,8 @@ class FolderCommandService():
         self.folder_datasource = FolderDataSource()
 
     def register(self, folder: Folder):
-        folder_obj = self.folder_datasource.register(folder)
-        return folder_obj
+        result = self.folder_datasource.register(folder)
+        return folder
 
     def update(self, org_folder: Folder, new_folder: Folder):
 
