@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from lib.model.folder.folder import (Folder, FolderAuthorID, FolderDeleteFlag,
-                                     FolderID)
+from lib.model.folder.folder import Folder
+from lib.model.folder.folder import FolderAuthorID
+from lib.model.folder.folder import FolderDeleteFlag
+from lib.model.folder.folder import FolderID
 from lib.model.folder.folder_repository import FolderRepository
 
 from .datasource import DataSource
