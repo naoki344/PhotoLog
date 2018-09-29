@@ -9,7 +9,7 @@ from app.application.folder import FolderCommandService
 from app.application.folder import FolderQueryService
 from lib.model.folder.folder import Folder
 from lib.model.folder.folder import FolderAuthorID
-from lib.model.folder.folder import FolderFactories
+from lib.model.folder.folder_factory import FolderFactory
 
 app_folder = Blueprint('app_folder', __name__)
 
@@ -31,8 +31,8 @@ def folder_index():
         post_data = request.form
         recive_data = _to_folder_dict(post_data)
 
-        folder_factories = FolderFactories()
-        folder_obj = folder_factories.create(recive_data)
+        folder_factory = FolderFactory()
+        folder_obj = folder_factory.create(recive_data)
 
         folder_command_service = FolderCommandService()
         registerd_folder = folder_command_service.register(folder_obj)
@@ -46,8 +46,8 @@ def folder_index():
         folder_id = int(post_data["folder_id"])
         recive_data = _to_folder_dict(post_data)
 
-        folder_factories = FolderFactories()
-        new_folder = folder_factories.restore(recive_data)
+        folder_factory = FolderFactory()
+        new_folder = folder_factory.restore(recive_data)
 
         folder_query_service = FolderQueryService()
         org_folder = folder_query_service.find(folder_id)
