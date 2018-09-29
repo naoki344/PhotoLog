@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import uuid
+import time
 from datetime import datetime
 
 from lib.model.folder.folder import Folder
@@ -18,40 +19,40 @@ from lib.model.folder.folder import FolderThumbnailUrl
 
 
 class FolderFactory():
-    def create(self, recive_data) -> Folder:
-        folder_uuid = 'folder' + ruuid.uuid4()
+    def create(self, dict_data) -> Folder:
+        folder_uuid = 'folder-' + str(uuid.uuid4())
         delete_flag = 0
-        now_time = int(time.mktime(now.timetuple()))
+        now_time = int(time.mktime(datetime.now().timetuple()))
 
         data = [
             FolderID(folder_uuid),
-            FolderAuthorID(recive_data["author_id"]),
-            FolderName(recive_data["name"]),
-            FolderDescription(recive_data["description"]),
+            FolderAuthorID(dict_data["author_id"]),
+            FolderName(dict_data["name"]),
+            FolderDescription(dict_data["description"]),
             FolderLastUpdateDate(now_time),
             FolderRegisterDate(now_time),
-            FolderReleaseStatus(recive_data["release_status"]),
-            FolderShareRange(recive_data["share_range"]),
-            FolderShareUrl(recive_data["share_url"]),
-            FolderThumbnailUrl(recive_data["thumbnail_url"]),
+            FolderReleaseStatus(dict_data["release_status"]),
+            FolderShareRange(dict_data["share_range"]),
+            FolderShareUrl(dict_data["share_url"]),
+            FolderThumbnailUrl(dict_data["thumbnail_url"]),
             FolderDeleteFlag(delete_flag),
         ]
         folder_obj = Folder(*data)
         return folder_obj
 
-    def restore(self, data) -> Folder:
+    def restore(self, dict_data) -> Folder:
         data = [
-            FolderID(recive_data["folder_id"]),
-            FolderAuthorID(recive_data["author_id"]),
-            FolderName(recive_data["name"]),
-            FolderDescription(recive_data["description"]),
-            FolderLastUpdateDate(now_time),
-            FolderRegisterDate(now_time),
-            FolderReleaseStatus(recive_data["release_status"]),
-            FolderShareRange(recive_data["share_range"]),
-            FolderShareUrl(recive_data["share_url"]),
-            FolderThumbnailUrl(recive_data["thumbnail_url"]),
-            FolderDeleteFlag(recive_data["delete_flag"]),
+            FolderID(dict_data["folder_id"]),
+            FolderAuthorID(dict_data["author_id"]),
+            FolderName(dict_data["name"]),
+            FolderDescription(dict_data["description"]),
+            FolderLastUpdateDate(),
+            FolderRegisterDate(),
+            FolderReleaseStatus(dict_data["release_status"]),
+            FolderShareRange(dict_data["share_range"]),
+            FolderShareUrl(dict_data["share_url"]),
+            FolderThumbnailUrl(dict_data["thumbnail_url"]),
+            FolderDeleteFlag(dict_data["delete_flag"]),
         ]
         folder_obj = Folder(*data)
         return folder_obj
