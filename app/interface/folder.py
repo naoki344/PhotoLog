@@ -2,10 +2,14 @@
 
 import json
 
-from flask import Blueprint, request
+from flask import Blueprint
+from flask import request
 
-from app.application.folder import FolderCommandService, FolderQueryService
-from lib.model.folder.folder import Folder, FolderAuthorID, FolderFactories
+from app.application.folder import FolderCommandService
+from app.application.folder import FolderQueryService
+from lib.model.folder.folder import Folder
+from lib.model.folder.folder import FolderAuthorID
+from lib.model.folder.folder import FolderFactories
 
 app_folder = Blueprint('app_folder', __name__)
 

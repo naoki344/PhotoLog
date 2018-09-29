@@ -6,7 +6,9 @@ import os
 import sys
 
 from app.infrastructure.folder import FolderDataSource
-from lib.model.folder.folder import Folder, FolderAuthorID, FolderID
+from lib.model.folder.folder import Folder
+from lib.model.folder.folder import FolderAuthorID
+from lib.model.folder.folder import FolderID
 from lib.model.folder.folder_list import FolderList
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/../..')

@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from abc import ABCMeta, abstractmethod
+from abc import ABCMeta
+from abc import abstractmethod
+
 from lib.model.folder.folder import Folder
-from lib.model.folder.folder import FolderID
 from lib.model.folder.folder import FolderAuthorID
+from lib.model.folder.folder import FolderID
+
 
 class FolderRepository(metaclass=ABCMeta):
 

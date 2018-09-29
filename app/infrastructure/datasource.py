@@ -1,10 +1,11 @@
 #!/usr/bin/python
 
 import os
-from os.path import join, dirname
-from dotenv import load_dotenv
-import mysql.connector
+from os.path import dirname
+from os.path import join
 
+import mysql.connector
+from dotenv import load_dotenv
 
 
 class DataSource():

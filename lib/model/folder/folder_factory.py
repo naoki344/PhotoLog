@@ -3,12 +3,18 @@
 import uuid
 from datetime import datetime
 
-from lib.model.folder.folder import (Folder, FolderAuthorID, FolderDeleteFlag,
-                                     FolderDescription, FolderID,
-                                     FolderLastUpdateDate, FolderName,
-                                     FolderRegisterDate, FolderReleaseStatus,
-                                     FolderShareRange, FolderShareUrl,
-                                     FolderThumbnailUrl)
+from lib.model.folder.folder import Folder
+from lib.model.folder.folder import FolderAuthorID
+from lib.model.folder.folder import FolderDeleteFlag
+from lib.model.folder.folder import FolderDescription
+from lib.model.folder.folder import FolderID
+from lib.model.folder.folder import FolderLastUpdateDate
+from lib.model.folder.folder import FolderName
+from lib.model.folder.folder import FolderRegisterDate
+from lib.model.folder.folder import FolderReleaseStatus
+from lib.model.folder.folder import FolderShareRange
+from lib.model.folder.folder import FolderShareUrl
+from lib.model.folder.folder import FolderThumbnailUrl
 
 
 class FolderFactory():
