@@ -23,8 +23,8 @@ app_folder = Blueprint('app_folder', __name__)
 def folder_index():
     if request.method == 'GET':
         folder_author_id = 1
-        folder_service = FolderQueryService()
-        json_txt = folder_service.find_all_folder(folder_author_id)
+        folder_query_service = FolderQueryService()
+        json_txt = folder_query_service.find_user_all(folder_author_id)
         return json_txt.encode("UTF-8")
 
     if request.method == 'POST':
@@ -32,46 +32,63 @@ def folder_index():
         recive_data = _to_folder_dict(post_data)
 
         folder_factories = FolderFactories()
-        folder_obj = folder_factories.create_folder(recive_data)
+        folder_obj = folder_factories.create(recive_data)
 
-        folder_service = FolderCommandService()
-        registerd_folder = folder_service.register_folder(folder_obj)
+        folder_command_service = FolderCommandService()
+        registerd_folder = folder_command_service.register(folder_obj)
+
         folder_dict = registerd_folder.to_dict()
         json_txt = json.dumps(folder_dict, indent=4)
         return json_txt.encode("UTF-8")
 
     if request.method == 'PUT':
         post_data = request.form
+        folder_id = int(post_data["folder_id"])
         recive_data = _to_folder_dict(post_data)
 
+        folder_factories = FolderFactories()
+        new_folder = folder_factories.restore(recive_data)
+
         folder_query_service = FolderQueryService()
-        folder = folder_query_service.find_folder(recive_data["folder_id"])
-        if (folder.can_update()):
-            folder_command_service = FolderCommandService()
-            updated_folder = folder_command_service.update_folder(
-                folder, recive_data)
-            folder_dict = updated_folder.to_dict()
+        org_folder = folder_query_service.find(folder_id)
+
+        folder_command_service = FolderCommandService()
+        updated_folder = folder_command_service.update(rog_folder, new_folder)
+
+        folder_dict = updated_folder.to_dict()
         json_txt = json.dumps(folder_dict, indent=4)
         return json_txt.encode("UTF-8")
 
     if request.method == 'DELETE':
         post_data = request.form
-        folder_id = post_data["folder_id"]
-        folder_service = FolderCommandService()
-        ret = folder_service.delete_folder(folder_id)
+        folder_id = int(post_data["folder_id"])
+
+        folder_query_service = FolderQueryService()
+        org_folder = folder_query_service.find(folder_id)
+
+        folder_command_service = FolderCommandService()
+        deleted_folder = folder_command_service.delete(org_folder)
+
+        json_txt = json.dumps(deleted_folder, indent=4)
         return ret.encode("UTF-8")
 
 
 def _to_folder_dict(self, post_data) -> Folder:
-    data = [
-        post_data["folder_id"],
-        post_data["author_id"],
+    if post_data['folder_id'] == None :
+        post_data['folder_id'] = ''
+
+    if post_data['delete_flag'] == None :
+        post_data['delete_flag'] = 0
+
+    dict_data = [
+        int(post_data["folder_id"]),
+        int(post_data["author_id"]),
         post_data["name"],
         post_data["description"],
-        post_data["release_status"],
-        post_data["share_range"],
+        int(post_data["release_status"]),
+        int(post_data["share_range"]),
         post_data["share_url"],
         post_data["thumbnail_url"],
-        post_data["delete_flag"],
+        int(post_data["delete_flag"]),
     ]
-    return data
+    return dict_data

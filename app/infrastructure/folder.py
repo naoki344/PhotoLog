@@ -13,7 +13,7 @@ class FolderDataSource(FolderRepository):
     def __init__(self):
         self.datasource = DataSource()
 
-    def get_all_folder(self, folder_author_id: FolderAuthorID):
+    def find_user_all(self, folder_author_id: FolderAuthorID):
         sql = 'SELECT * FROM folder WHERE author_id=%s AND delete_flag=0;'
         parameter = [folder_author_id]
         folders = self.datasource.get(sql, parameter, True)
@@ -24,7 +24,7 @@ class FolderDataSource(FolderRepository):
 
         return folder_obj_list
 
-    def find_folder(self, folder_id: FolderID):
+    def find(self, folder_id: FolderID):
         sql = 'SELECT * FROM folder WHERE folder_id=%s;'
         parameter = [folder_id]
         folders = self.datasource.get(sql, parameter, True)
@@ -35,7 +35,7 @@ class FolderDataSource(FolderRepository):
         folder_obj = self._to_folder_obj(folder_row)
         return folder_obj
 
-    def register_folder(self, folder: Folder):
+    def register(self, folder: Folder):
         sql = 'INSERT INTO folder(author_id,name,description,release_status,share_range,share_url,thumbnail_url) VALUES(%s,%s,%s,%s,%s,%s,%s) ;'
         parameter = [
             folder.author_id.value, folder.name.value,
@@ -52,7 +52,7 @@ class FolderDataSource(FolderRepository):
         folder_obj = self._to_folder_obj(folder_row)
         return folder_obj
 
-    def update_folder(self, folder: Folder):
+    def update(self, folder: Folder):
         sql = 'UPDATE folder SET author_id=%s,name=%s,description=%s,release_status=%s,share_range=%s,share_url=%s,thumbnail_url=%s WHERE folder_id=%s;'
         parameter = [
             folder.author_id.value, folder.name.value,
@@ -70,7 +70,7 @@ class FolderDataSource(FolderRepository):
         folder_obj = self._to_folder_obj(folder_row)
         return folder_obj
 
-    def delete_folder(self, folder_id: FolderID):
+    def delete(self, folder_id: FolderID):
         del_flag = FolderDeleteFlag.DELETED.value
         sql = 'UPDATE folder SET delete_flag=%s WHERE folder_id=%s;'
         parameter = [del_flag, folder_id]

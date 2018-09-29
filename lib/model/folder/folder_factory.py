@@ -18,7 +18,7 @@ from lib.model.folder.folder import FolderThumbnailUrl
 
 
 class FolderFactory():
-    def create_folder(self, recive_data) -> Folder:
+    def create(self, recive_data) -> Folder:
         folder_uuid = 'folder' + ruuid.uuid4()
         delete_flag = 0
         now_time = int(time.mktime(now.timetuple()))
@@ -39,7 +39,7 @@ class FolderFactory():
         folder_obj = Folder(*data)
         return folder_obj
 
-    def restore_folder(self, data) -> Folder:
+    def restore(self, data) -> Folder:
         data = [
             FolderID(recive_data["folder_id"]),
             FolderAuthorID(recive_data["author_id"]),

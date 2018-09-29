@@ -169,3 +169,9 @@ class Folder():
             "thumbnail_url": self.thumbnail_url.value,
             "delete_flag": self.delete_flag.value,
         }
+
+    def can_delete(self):
+        return True
+
+    def can_update(self):
+        return True
