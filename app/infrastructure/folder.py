@@ -36,7 +36,7 @@ class FolderDataSource(FolderRepository):
         return folder_obj
 
     def register(self, folder: Folder):
-        sql = 'INSERT INTO folder(folder_id,author_id,name,description,release_status,share_range,share_url,thumbnail_url) VALUES("%s","%s","%s","%s","%s","%s","%s","%s") ;'
+        sql = 'INSERT INTO folder(folder_id,author_id,name,description,release_status,share_range,share_url,thumbnail_url) VALUES(%s,%s,%s,%s,%s,%s,%s,%s) ;'
         parameter = [
             folder.folder_id.value, folder.author_id.value, folder.name.value,
             folder.description.value, folder.release_status.value,
@@ -55,10 +55,12 @@ class FolderDataSource(FolderRepository):
             folder.share_range.value, folder.share_url.value,
             folder.thumbnail_url.value, folder.folder_id.value
         ]
+        folder_id = folder.folder_id.value
         self.datasource.update(sql, parameter, True)
         folder_id = folder.folder_id.value
+        print(folder_id)
 
-        sql = 'SELECT * FROM folder WHERE folder_id="%s"'
+        sql = 'SELECT * FROM folder WHERE folder_id=%s'
         parameter = [folder_id]
         folders = self.datasource.get(sql, parameter, True)
         folder_row = folders[0]
@@ -68,7 +70,7 @@ class FolderDataSource(FolderRepository):
     def delete(self, folder: Folder):
         folder_id = folder.folder_id.value
         del_flag = FolderDeleteFlag.DELETED.value
-        sql = 'UPDATE folder SET delete_flag=%s WHERE folder_id="%s";'
+        sql = 'UPDATE folder SET delete_flag=%s WHERE folder_id=%s;'
         parameter = [del_flag, folder_id]
         try:
             ret_status = self.datasource.update(sql, parameter, True)

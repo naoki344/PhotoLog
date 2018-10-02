@@ -41,13 +41,14 @@ class FolderFactory():
         return folder_obj
 
     def restore(self, dict_data) -> Folder:
+        now_time = datetime.now()
         data = [
             FolderID(dict_data["folder_id"]),
             FolderAuthorID(dict_data["author_id"]),
             FolderName(dict_data["name"]),
             FolderDescription(dict_data["description"]),
-            FolderLastUpdateDate(),
-            FolderRegisterDate(),
+            FolderLastUpdateDate(now_time),
+            FolderRegisterDate(now_time),
             FolderReleaseStatus(dict_data["release_status"]),
             FolderShareRange(dict_data["share_range"]),
             FolderShareUrl(dict_data["share_url"]),
