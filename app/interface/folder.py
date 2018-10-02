@@ -18,13 +18,14 @@ app_folder = Blueprint('app_folder', __name__)
 #  - main.py のregister_blueprint が url_prefix='/photo_log/folder'
 #  - @app_folder.route('/file')
 
-
-@app_folder.route('/', methods=['POST', 'GET', 'PUT', 'DELETE'])
-def folder_index():
+@app_folder.route('/', methods=['GET','POST'])
+def folder_index(user_id):
+    folder_author_id = user_id
     if request.method == 'GET':
-        folder_author_id = 1
         folder_query_service = FolderQueryService()
-        json_txt = folder_query_service.find_user_all(folder_author_id)
+        user_folder_list = folder_query_service.find_user_all(folder_author_id)
+        folder_dict_list = user_folder_list.to_dict()
+        json_txt = json.dumps(folder_dict_list, indent=4)
         return json_txt.encode("UTF-8")
 
     if request.method == 'POST':
@@ -41,9 +42,23 @@ def folder_index():
         json_txt = json.dumps(folder_dict, indent=4)
         return json_txt.encode("UTF-8")
 
+
+@app_folder.route('/<path:folder_id>', methods=['GET', 'PUT', 'DELETE'])
+def folder(user_id,folder_id):
+    folder_author_id = user_id
+    if request.method == 'GET':
+        folder_query_service = FolderQueryService()
+        folder_obj = folder_query_service.find(folder_id)
+        if folder_obj == None:
+            txt = 'folder do not exist'
+            return txt.encode("UTF-8")
+
+        folder_dict = folder_obj.to_dict()
+        json_txt = json.dumps(folder_dict, indent=4)
+        return json_txt.encode("UTF-8")
+
     if request.method == 'PUT':
         post_data = request.form
-        folder_id = post_data["folder_id"]
         recive_data = _to_folder_dict(post_data)
 
         folder_factory = FolderFactory()
@@ -53,7 +68,7 @@ def folder_index():
         org_folder = folder_query_service.find(folder_id)
 
         folder_command_service = FolderCommandService()
-        updated_folder = folder_command_service.update(rog_folder, new_folder)
+        updated_folder = folder_command_service.update(org_folder, new_folder)
 
         folder_dict = updated_folder.to_dict()
         json_txt = json.dumps(folder_dict, indent=4)
@@ -61,7 +76,6 @@ def folder_index():
 
     if request.method == 'DELETE':
         post_data = request.form
-        folder_id = post_data["folder_id"]
 
         folder_query_service = FolderQueryService()
         org_folder = folder_query_service.find(folder_id)
@@ -70,7 +84,7 @@ def folder_index():
         deleted_folder = folder_command_service.delete(org_folder)
 
         json_txt = json.dumps(deleted_folder, indent=4)
-        return ret.encode("UTF-8")
+        return json_txt.encode("UTF-8")
 
 
 def _to_folder_dict(post_data) -> Folder:

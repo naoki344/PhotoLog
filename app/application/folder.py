@@ -21,14 +21,13 @@ class FolderQueryService():
     def find_user_all(self, folder_author_id: FolderAuthorID):
         folders = self.folder_datasource.find_user_all(folder_author_id)
         user_folder_list = FolderList(folders)
-        folder_dict_list = user_folder_list.to_dict()
-        json_txt = json.dumps(folder_dict_list, indent=4)
-        return json_txt
+        return user_folder_list
 
     def find(self, folder_id: FolderID):
-        folder_obj = self.folder_datasource.find(folder_id)
-        folder_dict = folder_obj.to_dict()
-        json_txt = json.dumps(folder_dict, indent=4)
+        folder = self.folder_datasource.find(folder_id)
+        if folder == None:
+            return None
+        return folder
 
 
 class FolderCommandService():
@@ -40,8 +39,7 @@ class FolderCommandService():
         return folder
 
     def update(self, org_folder: Folder, new_folder: Folder):
-
-        if (org_folder.can_update()):
+        if org_folder.can_update() :
             updated_folder = self.folder_datasource.update(new_folder)
         return updated_folder
 

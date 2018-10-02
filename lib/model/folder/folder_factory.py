@@ -22,7 +22,7 @@ class FolderFactory():
     def create(self, dict_data) -> Folder:
         folder_uuid = 'folder-' + str(uuid.uuid4())
         delete_flag = 0
-        now_time = int(time.mktime(datetime.now().timetuple()))
+        now_time = datetime.now()
 
         data = [
             FolderID(folder_uuid),

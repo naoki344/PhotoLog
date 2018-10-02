@@ -58,7 +58,7 @@ class FolderLastUpdateDate:
         self.value = date
 
     def datetime_string(self):
-        return datetime.fromtimestamp(self.value).isoformat()
+        return self.value.isoformat()
 
 
 '''
@@ -71,7 +71,7 @@ class FolderRegisterDate:
         self.value = date
 
     def datetime_string(self):
-        return datetime.fromtimestamp(self.value).isoformat()
+        return self.value.isoformat()
 
 
 '''
@@ -171,7 +171,7 @@ class Folder:
         return True
 
     @staticmethod
-    def from_dict(self, dict_data: dict) -> 'Folder':
+    def from_dict(dict_data: dict) -> 'Folder':
         data = [
             FolderID(dict_data["folder_id"]),
             FolderAuthorID(dict_data["author_id"]),
