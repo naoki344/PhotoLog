@@ -2,13 +2,10 @@
 
 import json
 
-from flask import Blueprint
-from flask import request
+from flask import Blueprint, request
 
-from app.application.folder import FolderCommandService
-from app.application.folder import FolderQueryService
-from lib.model.folder.folder import Folder
-from lib.model.folder.folder import FolderAuthorID
+from app.application.folder import FolderCommandService, FolderQueryService
+from lib.model.folder.folder import Folder, FolderAuthorID
 from lib.model.folder.folder_factory import FolderFactory
 
 app_folder = Blueprint('app_folder', __name__)
@@ -18,7 +15,8 @@ app_folder = Blueprint('app_folder', __name__)
 #  - main.py のregister_blueprint が url_prefix='/photo_log/folder'
 #  - @app_folder.route('/file')
 
-@app_folder.route('/', methods=['GET','POST'])
+
+@app_folder.route('/', methods=['GET', 'POST'])
 def folder_index(user_id):
     folder_author_id = user_id
     if request.method == 'GET':
@@ -44,7 +42,7 @@ def folder_index(user_id):
 
 
 @app_folder.route('/<path:folder_id>', methods=['GET', 'PUT', 'DELETE'])
-def folder(user_id,folder_id):
+def folder(user_id, folder_id):
     folder_author_id = user_id
     if request.method == 'GET':
         folder_query_service = FolderQueryService()
@@ -66,6 +64,9 @@ def folder(user_id,folder_id):
 
         folder_query_service = FolderQueryService()
         org_folder = folder_query_service.find(folder_id)
+        if folder_obj == None:
+            txt = 'folder do not exist'
+            return txt.encode("UTF-8")
 
         folder_command_service = FolderCommandService()
         updated_folder = folder_command_service.update(org_folder, new_folder)
@@ -89,12 +90,12 @@ def folder(user_id,folder_id):
 
 def _to_folder_dict(post_data) -> Folder:
     data = {}
-    if post_data.get('folder_id') == None :
+    if post_data.get('folder_id') == None:
         data['folder_id'] = ''
     else:
         data['folder_id'] = post_data['folder_id']
 
-    if post_data.get('delete_flag') == None :
+    if post_data.get('delete_flag') == None:
         data['delete_flag'] = 0
     else:
         data['delete_flag'] = post_data['delete_flag']
