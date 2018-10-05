@@ -28,14 +28,12 @@ def folder_index(user_id):
 
     if request.method == 'POST':
         post_data = request.form
-        data = dict(post_data.copy())
+        data = post_data.copy()
         folder_factory = FolderFactory()
         folder_obj = folder_factory.create(data)
         if folder_obj is False:
             txt = 'folder can not create'
             return txt.encode("UTF-8")
-
-        print(folder_obj.to_dict())
 
         folder_command_service = FolderCommandService()
         registerd_folder = folder_command_service.register(folder_obj)
@@ -64,7 +62,7 @@ def folder(user_id, folder_id):
 
         folder_query_service = FolderQueryService()
         org_folder = folder_query_service.find(folder_id)
-        if folder_obj == None:
+        if org_folder == None:
             txt = 'folder do not exist'
             return txt.encode("UTF-8")
 

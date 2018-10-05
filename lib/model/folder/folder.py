@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import copy
 from datetime import datetime
 from enum import Enum
 
@@ -189,7 +190,7 @@ class Folder:
     def modify(self, dict_data) -> 'Folder':
         now_time = datetime.now()
 
-        new_folder = self.deepcopy()
+        new_folder = copy.deepcopy(self)
 
         if dict_data.get('author_id') is not None:
             new_folder.author_id = FolderAuthorID(dict_data['author_id'])
@@ -202,11 +203,11 @@ class Folder:
                 dict_data['description'])
 
         if dict_data.get('release_status') is not None:
-            new_folder.release_status = FolderReleaseStatus(
-                dict_data['release_status'])
+            new_folder.release_status = FolderReleaseStatus[
+                dict_data['release_status']]
 
         if dict_data.get('share_range') is not None:
-            new_folder.share_range = FolderShareRange(dict_data['share_range'])
+            new_folder.share_range = FolderShareRange[dict_data['share_range']]
 
         if dict_data.get('share_url') is not None:
             new_folder.share_url = FolderShareUrl(dict_data['share_url'])
@@ -216,9 +217,9 @@ class Folder:
                 dict_data['thumbnail_url'])
 
         if dict_data.get('delete_status') is not None:
-            new_folder.delete_flag = FolderDeleteFlag(
-                dict_data['delete_status'])
+            new_folder.delete_flag = FolderDeleteFlag[
+                dict_data['delete_status']]
 
-        new_folder.last_update_date = LastUpdateDate(now_time)
+        new_folder.last_update_date = FolderLastUpdateDate(now_time)
 
         return new_folder
