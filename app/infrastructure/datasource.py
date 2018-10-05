@@ -1,10 +1,11 @@
 #!/usr/bin/python
 
 import os
-from os.path import join, dirname
-from dotenv import load_dotenv
-import mysql.connector
+from os.path import dirname
+from os.path import join
 
+import mysql.connector
+from dotenv import load_dotenv
 
 
 class DataSource():
@@ -22,11 +23,56 @@ class DataSource():
             'database' : db_name
         }
 
-    def get_db_data( self, query, parameter ):
+    def get( self, query, parameter, dict_flag ):
         db = mysql.connector.connect(**self.config)
-        cursor = db.cursor()
+        if dict_flag == True :
+            cursor = db.cursor(dictionary=True)
+        else :
+            cursor = db.cursor()
+
         cursor.execute(query, parameter)
         data = cursor.fetchall()
         cursor.close()
         db.close()
         return data
+
+    def insert( self, query, parameter, dict_flag ):
+        db = mysql.connector.connect(**self.config)
+        if dict_flag == True :
+            cursor = db.cursor(dictionary=True)
+        else :
+            cursor = db.cursor()
+
+        try:
+            data = cursor.execute(query, parameter)
+            get_id_query = 'SELECT LAST_INSERT_ID();'
+            parameter = []
+            cursor.execute(get_id_query, parameter)
+            data = cursor.fetchall()
+            db.commit()
+            row_id = data[0]["LAST_INSERT_ID()"]
+        except:
+            db.rollback()
+            raise
+
+        cursor.close()
+        db.close()
+        return row_id
+
+    def update( self, query, parameter, dict_flag ):
+        db = mysql.connector.connect(**self.config)
+        if dict_flag == True :
+            cursor = db.cursor(dictionary=True)
+        else :
+            cursor = db.cursor()
+
+        try:
+            data = cursor.execute(query, parameter)
+            db.commit()
+        except:
+            db.rollback()
+            raise
+
+        cursor.close()
+        db.close()
+        return True
