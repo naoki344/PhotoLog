@@ -6,7 +6,7 @@ import os
 import sys
 
 from app.infrastructure.folder import FolderDataSource
-from lib.model.folder.folder import Folder, FolderAuthorID, FolderID
+from lib.model.folder.folder import AuthorID, Folder, FolderID
 from lib.model.folder.folder_list import FolderList
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/../..')
@@ -16,8 +16,8 @@ class FolderQueryService():
     def __init__(self):
         self.folder_datasource = FolderDataSource()
 
-    def find_user_all(self, folder_author_id: FolderAuthorID):
-        folders = self.folder_datasource.find_user_all(folder_author_id)
+    def find_user_all(self, author_id: AuthorID):
+        folders = self.folder_datasource.find_user_all(author_id)
         user_folder_list = FolderList(folders)
         return user_folder_list
 

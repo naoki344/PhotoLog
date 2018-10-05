@@ -4,12 +4,10 @@ import time
 import uuid
 from datetime import datetime
 
-from lib.model.folder.folder import (Folder, FolderAuthorID, FolderDeleteFlag,
-                                     FolderDescription, FolderID,
-                                     FolderLastUpdateDate, FolderName,
-                                     FolderRegisterDate, FolderReleaseStatus,
-                                     FolderShareRange, FolderShareUrl,
-                                     FolderThumbnailUrl)
+from lib.model.folder.folder import (AuthorID, DeleteStatus, Description,
+                                     Folder, FolderID, LastUpdateDate, Name,
+                                     RegisterDate, ReleaseStatus, ShareRange,
+                                     ShareUrl, ThumbnailUrl)
 
 
 class FolderFactory():
@@ -55,16 +53,16 @@ class FolderFactory():
     def _to_folder_obj(self, dict_data):
         data = [
             FolderID(dict_data["folder_id"]),
-            FolderAuthorID(dict_data["author_id"]),
-            FolderName(dict_data["name"]),
-            FolderDescription(dict_data["description"]),
-            FolderLastUpdateDate(dict_data["last_update_date"]),
-            FolderRegisterDate(dict_data["register_date"]),
-            FolderReleaseStatus[dict_data["release_status"]],
-            FolderShareRange[dict_data["share_range"]],
-            FolderShareUrl(dict_data["share_url"]),
-            FolderThumbnailUrl(dict_data["thumbnail_url"]),
-            FolderDeleteFlag[dict_data["delete_status"]],
+            AuthorID(dict_data["author_id"]),
+            Name(dict_data["name"]),
+            Description(dict_data["description"]),
+            LastUpdateDate(dict_data["last_update_date"]),
+            RegisterDate(dict_data["register_date"]),
+            ReleaseStatus[dict_data["release_status"]],
+            ShareRange[dict_data["share_range"]],
+            ShareUrl(dict_data["share_url"]),
+            ThumbnailUrl(dict_data["thumbnail_url"]),
+            DeleteStatus[dict_data["delete_status"]],
         ]
         folder_obj = Folder(*data)
         return folder_obj

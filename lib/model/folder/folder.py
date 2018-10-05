@@ -19,7 +19,7 @@ Value Object : AuthorID
 '''
 
 
-class FolderAuthorID:
+class AuthorID:
     def __init__(self, user_id):
         self.value = user_id
 
@@ -29,7 +29,7 @@ Value Object : Name
 '''
 
 
-class FolderName:
+class Name:
     def __init__(self, name):
         self.value = name
 
@@ -39,7 +39,7 @@ Value Object : Description
 '''
 
 
-class FolderDescription:
+class Description:
     def __init__(self, description_txt):
         self.value = description_txt
 
@@ -54,7 +54,7 @@ Value Object : LastUpdateDate
 '''
 
 
-class FolderLastUpdateDate:
+class LastUpdateDate:
     def __init__(self, date=None):
         self.value = date
 
@@ -67,7 +67,7 @@ Value Object : RegisterDate
 '''
 
 
-class FolderRegisterDate:
+class RegisterDate:
     def __init__(self, date=None):
         self.value = date
 
@@ -80,7 +80,7 @@ Value Object : ReleaseStatus
 '''
 
 
-class FolderReleaseStatus(Enum):
+class ReleaseStatus(Enum):
     OPEN = 1
     CLOSE = 2
 
@@ -90,7 +90,7 @@ Value Object : ShareRange
 '''
 
 
-class FolderShareRange(Enum):
+class ShareRange(Enum):
     PRIVATE = 1
     PUBLIC = 2
     PASSFRASE = 3
@@ -101,7 +101,7 @@ Value Object : ShareUrl
 '''
 
 
-class FolderShareUrl:
+class ShareUrl:
     def __init__(self, share_url):
         self.value = share_url
 
@@ -111,7 +111,7 @@ Value Object : ThumbnailUrl
 '''
 
 
-class FolderThumbnailUrl:
+class ThumbnailUrl:
     def __init__(self, thumbnail_url):
         self.value = thumbnail_url
 
@@ -121,20 +121,17 @@ Value Object : DeleteFlag
 '''
 
 
-class FolderDeleteFlag(Enum):
+class DeleteStatus(Enum):
     UNDELETED = 0
     DELETED = 1
 
 
 class Folder:
-    def __init__(self, folder_id: FolderID, author_id: FolderAuthorID,
-                 name: FolderName, description: FolderDescription,
-                 last_update_date: FolderLastUpdateDate,
-                 register_date: FolderRegisterDate,
-                 release_status: FolderReleaseStatus,
-                 share_range: FolderShareRange, share_url: FolderShareUrl,
-                 thumbnail_url: FolderThumbnailUrl,
-                 delete_flag: FolderDeleteFlag):
+    def __init__(self, folder_id: FolderID, author_id: AuthorID, name: Name,
+                 description: Description, last_update_date: LastUpdateDate,
+                 register_date: RegisterDate, release_status: ReleaseStatus,
+                 share_range: ShareRange, share_url: ShareUrl,
+                 thumbnail_url: ThumbnailUrl, delete_status: DeleteStatus):
 
         self.folder_id = folder_id
         self.author_id = author_id
@@ -146,7 +143,7 @@ class Folder:
         self.share_range = share_range
         self.share_url = share_url
         self.thumbnail_url = thumbnail_url
-        self.delete_flag = delete_flag
+        self.delete_status = delete_status
 
     def to_dict(self):
         return {
@@ -160,7 +157,7 @@ class Folder:
             "share_range": self.share_range.name,
             "share_url": self.share_url.value,
             "thumbnail_url": self.thumbnail_url.value,
-            "delete_status": self.delete_flag.name,
+            "delete_status": self.delete_status.name,
         }
 
     def can_delete(self):
@@ -173,16 +170,16 @@ class Folder:
     def from_dict(dict_data: dict) -> 'Folder':
         data = [
             FolderID(dict_data["folder_id"]),
-            FolderAuthorID(dict_data["author_id"]),
-            FolderName(dict_data["name"]),
-            FolderDescription(dict_data["description"]),
-            FolderLastUpdateDate(dict_data["last_update_date"]),
-            FolderRegisterDate(dict_data['register_date']),
-            FolderReleaseStatus[dict_data["release_status"]],
-            FolderShareRange[dict_data["share_range"]],
-            FolderShareUrl(dict_data["share_url"]),
-            FolderThumbnailUrl(dict_data["thumbnail_url"]),
-            FolderDeleteFlag[dict_data["delete_status"]],
+            AuthorID(dict_data["author_id"]),
+            Name(dict_data["name"]),
+            Description(dict_data["description"]),
+            LastUpdateDate(dict_data["last_update_date"]),
+            RegisterDate(dict_data['register_date']),
+            ReleaseStatus[dict_data["release_status"]],
+            ShareRange[dict_data["share_range"]],
+            ShareUrl(dict_data["share_url"]),
+            ThumbnailUrl(dict_data["thumbnail_url"]),
+            DeleteStatus[dict_data["delete_status"]],
         ]
         folder_obj = Folder(*data)
         return folder_obj
@@ -193,33 +190,30 @@ class Folder:
         new_folder = copy.deepcopy(self)
 
         if dict_data.get('author_id') is not None:
-            new_folder.author_id = FolderAuthorID(dict_data['author_id'])
+            new_folder.author_id = AuthorID(dict_data['author_id'])
 
         if dict_data.get('name') is not None:
-            new_folder.name = FolderName(dict_data['name'])
+            new_folder.name = Name(dict_data['name'])
 
         if dict_data.get('description') is not None:
-            new_folder.description = FolderDescription(
-                dict_data['description'])
+            new_folder.description = Description(dict_data['description'])
 
         if dict_data.get('release_status') is not None:
-            new_folder.release_status = FolderReleaseStatus[
+            new_folder.release_status = ReleaseStatus[
                 dict_data['release_status']]
 
         if dict_data.get('share_range') is not None:
-            new_folder.share_range = FolderShareRange[dict_data['share_range']]
+            new_folder.share_range = ShareRange[dict_data['share_range']]
 
         if dict_data.get('share_url') is not None:
-            new_folder.share_url = FolderShareUrl(dict_data['share_url'])
+            new_folder.share_url = ShareUrl(dict_data['share_url'])
 
         if dict_data.get('thumbnail_url') is not None:
-            new_folder.thumbnail_url = FolderThumbnailUrl(
-                dict_data['thumbnail_url'])
+            new_folder.thumbnail_url = ThumbnailUrl(dict_data['thumbnail_url'])
 
         if dict_data.get('delete_status') is not None:
-            new_folder.delete_flag = FolderDeleteFlag[
-                dict_data['delete_status']]
+            new_folder.delete_status = DeleteFlag[dict_data['delete_status']]
 
-        new_folder.last_update_date = FolderLastUpdateDate(now_time)
+        new_folder.last_update_date = LastUpdateDate(now_time)
 
         return new_folder

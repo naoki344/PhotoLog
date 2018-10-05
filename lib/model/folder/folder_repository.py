@@ -1,31 +1,27 @@
 # -*- coding: utf-8 -*-
 
-from abc import ABCMeta
-from abc import abstractmethod
+from abc import ABCMeta, abstractmethod
 
-from lib.model.folder.folder import Folder
-from lib.model.folder.folder import FolderAuthorID
-from lib.model.folder.folder import FolderID
+from lib.model.folder.folder import AuthorID, Folder, FolderID
 
 
 class FolderRepository(metaclass=ABCMeta):
-
     @abstractmethod
-    def find_user_all(self, folder_author_id : FolderAuthorID ):
+    def find_user_all(self, author_id: AuthorID):
         pass
 
     @abstractmethod
-    def find(self, folder_id : FolderID ):
+    def find(self, folder_id: FolderID):
         pass
 
     @abstractmethod
-    def register(self, folder : Folder ):
+    def register(self, folder: Folder):
         pass
 
     @abstractmethod
-    def update(self, folder : Folder ):
+    def update(self, folder: Folder):
         pass
 
     @abstractmethod
-    def delete(self, folder_id : FolderID ):
+    def delete(self, folder_id: FolderID):
         pass

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from lib.model.folder.folder import (Folder, FolderAuthorID, FolderDeleteFlag,
-                                     FolderID)
+from lib.model.folder.folder import AuthorID, DeleteStatus, Folder, FolderID
 from lib.model.folder.folder_repository import FolderRepository
 
 from .datasource import DataSource
@@ -11,9 +10,9 @@ class FolderDataSource(FolderRepository):
     def __init__(self):
         self.datasource = DataSource()
 
-    def find_user_all(self, folder_author_id: FolderAuthorID):
+    def find_user_all(self, author_id: AuthorID):
         sql = 'SELECT * FROM folder WHERE author_id=%s AND delete_status="UNDELETED";'
-        parameter = [folder_author_id]
+        parameter = [author_id]
         folders = self.datasource.get(sql, parameter, True)
         folder_obj_list = []
         for folder_row in folders:
@@ -41,7 +40,7 @@ class FolderDataSource(FolderRepository):
             folder.description.value, folder.register_date.value,
             folder.last_update_date.value, folder.release_status.name,
             folder.share_range.name, folder.share_url.value,
-            folder.thumbnail_url.value, folder.delete_flag.name
+            folder.thumbnail_url.value, folder.delete_status.name
         ]
         folder_id = self.datasource.insert(sql, parameter, True)
 
@@ -54,7 +53,7 @@ class FolderDataSource(FolderRepository):
             folder.description.value, folder.register_date.value,
             folder.last_update_date.value, folder.release_status.name,
             folder.share_range.name, folder.share_url.value,
-            folder.thumbnail_url.value, folder.delete_flag.name,
+            folder.thumbnail_url.value, folder.delete_status.name,
             folder.folder_id.value
         ]
         folder_id = folder.folder_id.value
@@ -71,7 +70,7 @@ class FolderDataSource(FolderRepository):
 
     def delete(self, folder: Folder):
         folder_id = folder.folder_id.value
-        #del_flag = FolderDeleteFlag.DELETED.name
+        #del_flag = DeleteStatus.DELETED.name
         sql = 'UPDATE folder SET delete_status="DELETED" WHERE folder_id=%s;'
         parameter = [folder_id]
         try:
