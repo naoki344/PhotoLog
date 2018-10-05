@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from lib.model.folder.folder import Folder
-from lib.model.folder.folder import FolderAuthorID
-from lib.model.folder.folder import FolderDeleteFlag
-from lib.model.folder.folder import FolderID
+from lib.model.folder.folder import (Folder, FolderAuthorID, FolderDeleteFlag,
+                                     FolderID)
 from lib.model.folder.folder_repository import FolderRepository
 
 from .datasource import DataSource
@@ -14,7 +12,7 @@ class FolderDataSource(FolderRepository):
         self.datasource = DataSource()
 
     def find_user_all(self, folder_author_id: FolderAuthorID):
-        sql = 'SELECT folder_id,author_id,name,description,last_update_date,register_date,release_status,share_range,share_url,thumbnail_url,delete_flag FROM folder WHERE author_id=%s AND delete_flag=0;'
+        sql = 'SELECT folder_id,author_id,name,description,last_update_date,register_date,release_status,share_range,share_url,thumbnail_url,delete_status FROM folder WHERE author_id=%s AND delete_status=UNDELETED;'
         parameter = [folder_author_id]
         folders = self.datasource.get(sql, parameter, True)
         folder_obj_list = []
@@ -25,7 +23,7 @@ class FolderDataSource(FolderRepository):
         return folder_obj_list
 
     def find(self, folder_id: FolderID):
-        sql = 'SELECT folder_id,author_id,name,description,last_update_date,register_date,release_status,share_range,share_url,thumbnail_url,delete_flag FROM folder WHERE folder_id=%s;'
+        sql = 'SELECT folder_id,author_id,name,description,last_update_date,register_date,release_status,share_range,share_url,thumbnail_url,delete_status FROM folder WHERE folder_id=%s;'
         parameter = [folder_id]
         folders = self.datasource.get(sql, parameter, True)
         if len(folders) == 0:
@@ -69,9 +67,9 @@ class FolderDataSource(FolderRepository):
 
     def delete(self, folder: Folder):
         folder_id = folder.folder_id.value
-        del_flag = FolderDeleteFlag.DELETED.value
-        sql = 'UPDATE folder SET delete_flag=%s WHERE folder_id=%s;'
-        parameter = [del_flag, folder_id]
+        #del_flag = FolderDeleteFlag.DELETED.name
+        sql = 'UPDATE folder SET delete_status=DELETED WHERE folder_id=%s;'
+        parameter = [folder_id]
         try:
             ret_status = self.datasource.update(sql, parameter, True)
         except:

@@ -1,59 +1,105 @@
 # -*- coding: utf-8 -*-
 
-import uuid
 import time
+import uuid
 from datetime import datetime
 
-from lib.model.folder.folder import Folder
-from lib.model.folder.folder import FolderAuthorID
-from lib.model.folder.folder import FolderDeleteFlag
-from lib.model.folder.folder import FolderDescription
-from lib.model.folder.folder import FolderID
-from lib.model.folder.folder import FolderLastUpdateDate
-from lib.model.folder.folder import FolderName
-from lib.model.folder.folder import FolderRegisterDate
-from lib.model.folder.folder import FolderReleaseStatus
-from lib.model.folder.folder import FolderShareRange
-from lib.model.folder.folder import FolderShareUrl
-from lib.model.folder.folder import FolderThumbnailUrl
+from lib.model.folder.folder import (Folder, FolderAuthorID, FolderDeleteFlag,
+                                     FolderDescription, FolderID,
+                                     FolderLastUpdateDate, FolderName,
+                                     FolderRegisterDate, FolderReleaseStatus,
+                                     FolderShareRange, FolderShareUrl,
+                                     FolderThumbnailUrl)
 
 
 class FolderFactory():
     def create(self, dict_data) -> Folder:
-        folder_uuid = 'folder-' + str(uuid.uuid4())
         delete_flag = 0
         now_time = datetime.now()
 
-        data = [
-            FolderID(folder_uuid),
-            FolderAuthorID(dict_data["author_id"]),
-            FolderName(dict_data["name"]),
-            FolderDescription(dict_data["description"]),
-            FolderLastUpdateDate(now_time),
-            FolderRegisterDate(now_time),
-            FolderReleaseStatus(dict_data["release_status"]),
-            FolderShareRange(dict_data["share_range"]),
-            FolderShareUrl(dict_data["share_url"]),
-            FolderThumbnailUrl(dict_data["thumbnail_url"]),
-            FolderDeleteFlag(delete_flag),
-        ]
-        folder_obj = Folder(*data)
-        return folder_obj
+        if dict_data.get('folder_id') == None:
+            dict_data['folder_id'] = 'folder-' + str(uuid.uuid4())
 
-    def restore(self, dict_data) -> Folder:
+        if dict_data.get('author_id') == None:
+            return False
+
+        if dict_data.get('name') == None:
+            return False
+
+        if dict_data.get('description') == None:
+            dict_data['description'] = ''
+
+        if dict_data.get('register_date') == None:
+            dict_data['register_date'] = now_time
+
+        if dict_data.get('last_update_date') == None:
+            dict_data['last_update_date'] = now_time
+
+        if dict_data.get('release_status') == None:
+            dict_data['release_status'] = 'OPEN'
+
+        if dict_data.get('share_range') == None:
+            dict_data['share_range'] = 'PRIVATE'
+
+        if dict_data.get('share_url') == None:
+            dict_data['share_url'] = ''
+
+        if dict_data.get('thumbnail_url') == None:
+            dict_data['thumbnail_url'] = ''
+
+        if dict_data.get('delete_status') == None:
+            dict_data['delete_status'] = 'UNDELETED'
+
+        return self._to_folder_obj(dict_data)
+
+    def restore(self, dict_data, org_folder) -> Folder:
         now_time = datetime.now()
+
+        if dict_data.get('folder_id') == None:
+            return False
+
+        if dict_data.get('author_id') == None:
+            dict_data['author_id'] = org_folder.author_id.value
+
+        if dict_data.get('name') == None:
+            dict_data['name'] = org_folder.name.value
+
+        if dict_data.get('description') == None:
+            dict_data['description'] = org_folder.description.value
+
+        if dict_data.get('release_status') == None:
+            dict_data['release_status'] = org_folder.release_status.name
+
+        if dict_data.get('share_range') == None:
+            dict_data['share_range'] = org_folder.share_range.name
+
+        if dict_data.get('share_url') == None:
+            dict_data['share_url'] = org_folder.share_url.value
+
+        if dict_data.get('thumbnail_url') == None:
+            dict_data['thumbnail_url'] = org_folder.thumbnail_url.value
+
+        if dict_data.get('delete_status') == None:
+            dict_data['delete_status'] = org_folder.delete_flag.name
+
+        dict_data["register_date"] = org_folder.register_date
+        dict_data["update_date"] = now_time
+
+        return self._to_folder_obj(dict_data)
+
+    def _to_folder_obj(self, dict_data):
         data = [
             FolderID(dict_data["folder_id"]),
             FolderAuthorID(dict_data["author_id"]),
             FolderName(dict_data["name"]),
             FolderDescription(dict_data["description"]),
-            FolderLastUpdateDate(now_time),
-            FolderRegisterDate(now_time),
-            FolderReleaseStatus(dict_data["release_status"]),
-            FolderShareRange(dict_data["share_range"]),
+            FolderLastUpdateDate(dict_data["last_update_date"]),
+            FolderRegisterDate(dict_data["register_date"]),
+            FolderReleaseStatus[dict_data["release_status"]],
+            FolderShareRange[dict_data["share_range"]],
             FolderShareUrl(dict_data["share_url"]),
             FolderThumbnailUrl(dict_data["thumbnail_url"]),
-            FolderDeleteFlag(dict_data["delete_flag"]),
+            FolderDeleteFlag[dict_data["delete_status"]],
         ]
         folder_obj = Folder(*data)
         return folder_obj

@@ -80,7 +80,6 @@ Value Object : ReleaseStatus
 
 
 class FolderReleaseStatus(Enum):
-    NONE = 0
     OPEN = 1
     CLOSE = 2
 
@@ -91,7 +90,6 @@ Value Object : ShareRange
 
 
 class FolderShareRange(Enum):
-    NONE = 0
     PRIVATE = 1
     PUBLIC = 2
     PASSFRASE = 3
@@ -123,7 +121,7 @@ Value Object : DeleteFlag
 
 
 class FolderDeleteFlag(Enum):
-    NONE = 0
+    UNDELETED = 0
     DELETED = 1
 
 
@@ -157,11 +155,11 @@ class Folder:
             "description": self.description.value,
             "register_date": self.register_date.datetime_string(),
             "last_update_date": self.last_update_date.datetime_string(),
-            "release_status": self.release_status.value,
-            "share_range": self.share_range.value,
+            "release_status": self.release_status.name,
+            "share_range": self.share_range.name,
             "share_url": self.share_url.value,
             "thumbnail_url": self.thumbnail_url.value,
-            "delete_flag": self.delete_flag.value,
+            "delete_status": self.delete_flag.name,
         }
 
     def can_delete(self):
@@ -179,11 +177,11 @@ class Folder:
             FolderDescription(dict_data["description"]),
             FolderLastUpdateDate(dict_data["last_update_date"]),
             FolderRegisterDate(dict_data['register_date']),
-            FolderReleaseStatus(dict_data["release_status"]),
-            FolderShareRange(dict_data["share_range"]),
+            FolderReleaseStatus[dict_data["release_status"]],
+            FolderShareRange[dict_data["share_range"]],
             FolderShareUrl(dict_data["share_url"]),
             FolderThumbnailUrl(dict_data["thumbnail_url"]),
-            FolderDeleteFlag(dict_data["delete_flag"]),
+            FolderDeleteFlag[dict_data["delete_status"]],
         ]
         folder_obj = Folder(*data)
         return folder_obj
