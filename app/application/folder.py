@@ -6,9 +6,7 @@ import os
 import sys
 
 from app.infrastructure.folder import FolderDataSource
-from lib.model.folder.folder import Folder
-from lib.model.folder.folder import FolderAuthorID
-from lib.model.folder.folder import FolderID
+from lib.model.folder.folder import Folder, FolderAuthorID, FolderID
 from lib.model.folder.folder_list import FolderList
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/../..')
@@ -39,16 +37,11 @@ class FolderCommandService():
         return folder
 
     def update(self, org_folder: Folder, new_folder: Folder):
-        if org_folder.can_update() :
+        if org_folder.can_update():
             updated_folder = self.folder_datasource.update(new_folder)
         return updated_folder
 
     def delete(self, folder: Folder):
-        if folder.can_delete() :
-            try:
-                deleted_folder = self.folder_datasource.delete(folder)
-            except:
-                msg = 'folder[' + folder.folder_id.value + '] delete is failuer'
-                return msg
-
+        if folder.can_delete():
+            deleted_folder = self.folder_datasource.delete(folder)
         return deleted_folder

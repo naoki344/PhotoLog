@@ -72,7 +72,7 @@ class FolderDataSource(FolderRepository):
     def delete(self, folder: Folder):
         folder_id = folder.folder_id.value
         #del_flag = FolderDeleteFlag.DELETED.name
-        sql = 'UPDATE folder SET delete_status=DELETED WHERE folder_id=%s;'
+        sql = 'UPDATE folder SET delete_status="DELETED" WHERE folder_id=%s;'
         parameter = [folder_id]
         try:
             ret_status = self.datasource.update(sql, parameter, True)

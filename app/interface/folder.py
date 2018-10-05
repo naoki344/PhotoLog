@@ -82,7 +82,11 @@ def folder(user_id, folder_id):
         org_folder = folder_query_service.find(folder_id)
 
         folder_command_service = FolderCommandService()
-        deleted_folder = folder_command_service.delete(org_folder)
+        try:
+            deleted_folder = folder_command_service.delete(org_folder)
+        except:
+            msg = 'folder[' + org_folder.folder_id.value + '] delete is failuer'
+            return msg.encode("UTF-8")
 
         json_txt = json.dumps(deleted_folder, indent=4)
         return json_txt.encode("UTF-8")
