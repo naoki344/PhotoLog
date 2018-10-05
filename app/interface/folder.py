@@ -68,8 +68,7 @@ def folder(user_id, folder_id):
             txt = 'folder do not exist'
             return txt.encode("UTF-8")
 
-        folder_factory = FolderFactory()
-        new_folder = folder_factory.restore(post_data, org_folder)
+        new_folder = org_folder.modify(post_data)
 
         folder_command_service = FolderCommandService()
         updated_folder = folder_command_service.update(org_folder, new_folder)

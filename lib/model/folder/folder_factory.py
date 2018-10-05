@@ -52,41 +52,6 @@ class FolderFactory():
 
         return self._to_folder_obj(dict_data)
 
-    def restore(self, dict_data, org_folder) -> Folder:
-        now_time = datetime.now()
-
-        if dict_data.get('folder_id') == None:
-            return False
-
-        if dict_data.get('author_id') == None:
-            dict_data['author_id'] = org_folder.author_id.value
-
-        if dict_data.get('name') == None:
-            dict_data['name'] = org_folder.name.value
-
-        if dict_data.get('description') == None:
-            dict_data['description'] = org_folder.description.value
-
-        if dict_data.get('release_status') == None:
-            dict_data['release_status'] = org_folder.release_status.name
-
-        if dict_data.get('share_range') == None:
-            dict_data['share_range'] = org_folder.share_range.name
-
-        if dict_data.get('share_url') == None:
-            dict_data['share_url'] = org_folder.share_url.value
-
-        if dict_data.get('thumbnail_url') == None:
-            dict_data['thumbnail_url'] = org_folder.thumbnail_url.value
-
-        if dict_data.get('delete_status') == None:
-            dict_data['delete_status'] = org_folder.delete_flag.name
-
-        dict_data["register_date"] = org_folder.register_date
-        dict_data["update_date"] = now_time
-
-        return self._to_folder_obj(dict_data)
-
     def _to_folder_obj(self, dict_data):
         data = [
             FolderID(dict_data["folder_id"]),

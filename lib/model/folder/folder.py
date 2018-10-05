@@ -185,3 +185,40 @@ class Folder:
         ]
         folder_obj = Folder(*data)
         return folder_obj
+
+    def modify(self, dict_data) -> 'Folder':
+        now_time = datetime.now()
+
+        new_folder = self.deepcopy()
+
+        if dict_data.get('author_id') is not None:
+            new_folder.author_id = FolderAuthorID(dict_data['author_id'])
+
+        if dict_data.get('name') is not None:
+            new_folder.name = FolderName(dict_data['name'])
+
+        if dict_data.get('description') is not None:
+            new_folder.description = FolderDescription(
+                dict_data['description'])
+
+        if dict_data.get('release_status') is not None:
+            new_folder.release_status = FolderReleaseStatus(
+                dict_data['release_status'])
+
+        if dict_data.get('share_range') is not None:
+            new_folder.share_range = FolderShareRange(dict_data['share_range'])
+
+        if dict_data.get('share_url') is not None:
+            new_folder.share_url = FolderShareUrl(dict_data['share_url'])
+
+        if dict_data.get('thumbnail_url') is not None:
+            new_folder.thumbnail_url = FolderThumbnailUrl(
+                dict_data['thumbnail_url'])
+
+        if dict_data.get('delete_status') is not None:
+            new_folder.delete_flag = FolderDeleteFlag(
+                dict_data['delete_status'])
+
+        new_folder.last_update_date = LastUpdateDate(now_time)
+
+        return new_folder
