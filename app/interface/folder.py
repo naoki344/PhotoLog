@@ -2,10 +2,14 @@
 
 import json
 
-from flask import Blueprint, request
+import flask_login
+from flask import Blueprint
+from flask import request
 
-from app.application.folder import FolderCommandService, FolderQueryService
+from app.application.folder import FolderCommandService
+from app.application.folder import FolderQueryService
 from lib.model.folder.folder_factory import FolderFactory
+from lib.model.user.user import User
 
 app_folder = Blueprint('app_folder', __name__)
 
@@ -16,7 +20,9 @@ app_folder = Blueprint('app_folder', __name__)
 
 
 @app_folder.route('/', methods=['GET', 'POST'])
+@flask_login.login_required
 def folder_index(user_id):
+
     folder_author_id = user_id
     if request.method == 'GET':
         folder_query_service = FolderQueryService()
@@ -43,6 +49,7 @@ def folder_index(user_id):
 
 
 @app_folder.route('/<path:folder_id>', methods=['GET', 'PUT', 'DELETE'])
+@flask_login.login_required
 def folder(user_id, folder_id):
     folder_author_id = user_id
     if request.method == 'GET':
