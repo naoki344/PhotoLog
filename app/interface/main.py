@@ -18,6 +18,8 @@ from lib.model.user.user import UserID
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/../../')
 
+
+
 application = Flask(__name__)
 application.register_blueprint(
     app_folder, url_prefix='/photo_log/<string:user_id>/folder')
@@ -31,30 +33,6 @@ application.secret_key = "".join([
 #############################################################
 login_manager = flask_login.LoginManager()
 login_manager.init_app(application)
-
-
-@login_manager.user_loader
-def load_user(user_id):
-    user = UserFindService().find(UserID(user_id))
-    if user is None:
-        return
-    return user
-
-
-@login_manager.unauthorized_handler
-def unauthorized_handler():
-    return 'Unauthorized'
-
-
-@login_manager.request_loader
-def request_loader(request):
-    user_id = request.form.get('user_id')
-    user = UserFindService().find(UserID(user_id))
-    if user is None:
-        return
-
-    if user.auth(request.form['password']):
-        return user
 
 
 @application.route('/photo_log/user/login', methods=['GET', 'POST'])
@@ -78,6 +56,30 @@ def login():
         return redirect(url_for('app_folder.folder_index', user_id=user_id))
 
     return 'Bad login'
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    user = UserFindService().find(UserID(user_id))
+    if user is None:
+        return
+    return user
+
+
+@login_manager.unauthorized_handler
+def unauthorized_handler():
+    return redirect(url_for('login'))
+
+
+@login_manager.request_loader
+def request_loader(request):
+    user_id = request.form.get('user_id')
+    user = UserFindService().find(UserID(user_id))
+    if user is None:
+        return
+
+    if user.auth(request.form['password']):
+        return user
 
 
 if __name__ == "__main__":
