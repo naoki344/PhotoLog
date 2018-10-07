@@ -3,6 +3,8 @@ from enum import Enum
 
 from flask_login import UserMixin
 
+import bcrypt
+
 
 class UserID:
     def __init__(self, value: str):
@@ -14,10 +16,16 @@ class Password:
         self.value = value
 
     def auth(self, imput_password):
-        password_hash = imput_password
-        if password_hash == self.value:
+        if bcrypt.checkpw(imput_password, self.value):
             return True
         return False
+
+    @staticmethod
+    def create_hashpw(password):
+        hashed = bcrypt.hashpw(
+            base64.b64encode(hashlib.sha256(password).digest()),
+            bcrypt.gensalt())
+        return Password(hashed)
 
 
 class Name:
