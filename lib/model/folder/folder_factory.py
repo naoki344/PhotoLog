@@ -4,15 +4,22 @@ import time
 import uuid
 from datetime import datetime
 
-from lib.model.folder.folder import (AuthorID, DeleteStatus, Description,
-                                     Folder, FolderID, LastUpdateDate, Name,
-                                     RegisterDate, ReleaseStatus, ShareRange,
-                                     ShareUrl, ThumbnailUrl)
+from lib.model.folder.folder import AuthorID
+from lib.model.folder.folder import DeleteStatus
+from lib.model.folder.folder import Description
+from lib.model.folder.folder import Folder
+from lib.model.folder.folder import FolderID
+from lib.model.folder.folder import LastUpdateDate
+from lib.model.folder.folder import Name
+from lib.model.folder.folder import RegisterDate
+from lib.model.folder.folder import ReleaseStatus
+from lib.model.folder.folder import ShareRange
+from lib.model.folder.folder import ShareUrl
+from lib.model.folder.folder import ThumbnailUrl
 
 
 class FolderFactory():
     def create(self, dict_data) -> Folder:
-        delete_flag = 0
         now_time = datetime.now()
 
         if dict_data.get('folder_id') == None:

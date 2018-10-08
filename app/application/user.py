@@ -9,3 +9,11 @@ class UserFindService:
 
     def find(self, user_id: UserID):
         return self.user_datasource.find(user_id)
+
+
+class UserRegisterService:
+    def __init__(self):
+        self.user_datasource = UserDataSource()
+
+    def register(self, user: User):
+        return self.user_datasource.register(user)

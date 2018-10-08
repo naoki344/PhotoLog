@@ -32,19 +32,14 @@ class DataSource():
 
         try:
             data = cursor.execute(query, parameter)
-            get_id_query = 'SELECT LAST_INSERT_ID();'
-            parameter = []
-            cursor.execute(get_id_query, parameter)
-            data = cursor.fetchall()
             db.commit()
-            row_id = data[0]["LAST_INSERT_ID()"]
         except:
             db.rollback()
             raise
 
         cursor.close()
         db.close()
-        return row_id
+        return True
 
     def update(self, query, parameter, dict_flag):
         db = mysql.connector.connect(**self.config)

@@ -1,9 +1,10 @@
+import base64
+import hashlib
 from datetime import datetime
 from enum import Enum
 
-from flask_login import UserMixin
-
 import bcrypt
+from flask_login import UserMixin
 
 
 class UserID:
@@ -16,16 +17,20 @@ class Password:
         self.value = value
 
     def auth(self, imput_password):
-        if bcrypt.checkpw(imput_password, self.value):
+        if bcrypt.checkpw(
+                self.to_base64(imput_password), self.value.encode('utf-8')):
             return True
         return False
 
     @staticmethod
     def create_hashpw(password):
-        hashed = bcrypt.hashpw(
-            base64.b64encode(hashlib.sha256(password).digest()),
-            bcrypt.gensalt())
-        return Password(hashed)
+        hashed = bcrypt.hashpw(self.to_base64(password), bcrypt.gensalt())
+        hashed_pass = hashed.decode('utf-8')
+        return hashed_pass
+
+    def to_base64(self, password):
+        return base64.b64encode(
+            hashlib.sha256(password.encode('utf-8')).digest())
 
 
 class Name:
@@ -116,6 +121,17 @@ class Address:
             house_number=HouseNumber(dict_data['house_number']),
             building_number=BuildingNumber(dict_data['building_number']))
 
+    def to_sql_dict(self) -> dict:
+        dict_data = {
+            'postal_code': self.postal_code.value,
+            'prefecture': self.prefecture.value,
+            'city': self.city.value,
+            'house_number': self.house_number.value,
+            'building_number': self.building_number.value,
+        }
+
+        return dict_data
+
 
 class EmailAddress:
     def __init__(self, value: str):
@@ -142,6 +158,15 @@ class Contact:
             email_address=EmailAddress(dict_data['user_id']),
             phone_number=PhoneNumber(dict_data['phone_number']),
         )
+
+    def to_sql_dict(self) -> dict:
+        dict_data = {
+            'email_address': self.email_address.value,
+            'phone_number': self.phone_number.value,
+        }
+        dict_data.update(self.address.to_sql_dict())
+
+        return dict_data
 
 
 class User(UserMixin):
@@ -199,3 +224,21 @@ class User(UserMixin):
             user_type=UserType[dict_data['user_type']],
             register_date=RegisterDate(dict_data['register_date']),
             last_update_date=LastUpdateDate(dict_data['last_update_date']))
+
+    def to_sql_dict(self) -> dict:
+        dict_data = {
+            'user_id': self.user_id.value,
+            'password': self.password.value,
+            'name': self.name.value,
+            'nick_name': self.nick_name.value,
+            'birthday': self.birthday.value,
+            'gender': self.gender.name,
+            'terms_status': self.terms_status.name,
+            'user_type': self.user_type.name,
+            'register_date': self.register_date.value,
+            'last_update_date': self.last_update_date.value,
+        }
+        contact_dict = self.contact.to_sql_dict()
+        dict_data.update(contact_dict)
+
+        return dict_data

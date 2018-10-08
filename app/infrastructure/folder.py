@@ -17,7 +17,7 @@ class FolderDataSource(FolderRepository):
     def find_user_all(self, author_id: AuthorID):
         sql = 'SELECT * FROM {}_folder WHERE author_id=%s AND delete_status="UNDELETED";'.format(
             self.db_prefix)
-        parameter = [author_id]
+        parameter = [author_id.value]
         folders = self.datasource.get(sql, parameter, True)
         folder_obj_list = []
         for folder_row in folders:
@@ -29,7 +29,7 @@ class FolderDataSource(FolderRepository):
     def find(self, folder_id: FolderID):
         sql = 'SELECT * FROM {}_folder WHERE folder_id=%s;'.format(
             self.db_prefix)
-        parameter = [folder_id]
+        parameter = [folder_id.value]
         folders = self.datasource.get(sql, parameter, True)
         if len(folders) == 0:
             return None
@@ -63,17 +63,10 @@ class FolderDataSource(FolderRepository):
             folder.thumbnail_url.value, folder.delete_status.name,
             folder.folder_id.value
         ]
-        folder_id = folder.folder_id.value
         self.datasource.update(sql, parameter, True)
-        folder_id = folder.folder_id.value
-        print(folder_id)
+        folder_id = folder.folder_id
 
-        sql = 'SELECT * FROM folder WHERE folder_id=%s'
-        parameter = [folder_id]
-        folders = self.datasource.get(sql, parameter, True)
-        folder_row = folders[0]
-        folder_obj = self._to_folder_obj(folder_row)
-        return folder_obj
+        return self.find(folder_id)
 
     def delete(self, folder: Folder):
         folder_id = folder.folder_id.value
