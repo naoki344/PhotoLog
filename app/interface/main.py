@@ -11,6 +11,7 @@ from flask import Flask
 from flask import redirect
 from flask import request
 from flask import url_for
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/../../')
 
 from app.application.user import UserFindService
 from app.application.user import UserRegisterService
@@ -18,8 +19,6 @@ from app.interface.folder import app_folder
 from lib.model.user.user import User
 from lib.model.user.user import UserID
 from lib.model.user.user_factory import UserFactory
-
-sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/../../')
 
 application = Flask(__name__)
 application.register_blueprint(
