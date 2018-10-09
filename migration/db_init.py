@@ -1,28 +1,21 @@
 #!/usr/bin/python
 
 import os
-from os.path import dirname, join
+import sys
 
 import mysql.connector
-from dotenv import load_dotenv
 
-env_file_path = join(dirname(__file__), '../app/.env')
-load_dotenv(env_file_path)
-db_user = os.environ.get("PL_DB_USER")
-db_password = os.environ.get("PL_DB_PASSWORD")
-db_hostname = os.environ.get("PL_DB_HOSTNAME")
-db_name = os.environ.get("PL_DB_NAME")
+from app.util import get_db_config
+from app.util import get_db_prefix
 
-config = {
-    'user': db_user,
-    'password': db_password,
-    'host': db_hostname,
-    'database': db_name
-}
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/..')
+
+config = get_db_config()
+db_prefix = get_db_prefix()
 
 db = mysql.connector.connect(**config)
 sql = """
-    CREATE TABLE IF NOT EXISTS folder (
+    CREATE TABLE IF NOT EXISTS %s_folder (
         folder_id varchar(100) PRIMARY KEY NOT NULL,
         author_id varchar(100) DEFAULT NULL,
         name varchar(50) NOT NULL DEFAULT '',
@@ -34,13 +27,13 @@ sql = """
         share_url VARCHAR(8190) NOT NULL DEFAULT '',
         thumbnail_url VARCHAR(8190) NOT NULL DEFAULT '',
         delete_status varchar(20) DEFAULT NULL
-    );"""
+    );""" % db_prefix
 cursor = db.cursor()
 cursor.execute(sql)
 cursor.close()
 
 sql = """
-    CREATE TABLE IF NOT EXISTS page (
+    CREATE TABLE IF NOT EXISTS %s_page (
         page_id varchar(100) PRIMARY KEY NOT NULL,
         author_id varchar(100) DEFAULT NULL,
         name varchar(50) NOT NULL DEFAULT '',
@@ -52,13 +45,13 @@ sql = """
         share_url VARCHAR(8190) NOT NULL DEFAULT '',
         thumbnail_url VARCHAR(8190) NOT NULL DEFAULT '',
         delete_status varchar(20) DEFAULT NULL
-    );"""
+    );""" % db_prefix
 cursor = db.cursor()
 cursor.execute(sql)
 cursor.close()
 
 sql = """
-    CREATE TABLE IF NOT EXISTS album (
+    CREATE TABLE IF NOT EXISTS %s_album (
         album_id varchar(100) PRIMARY KEY NOT NULL,
         author_id varchar(100) DEFAULT NULL,
         name varchar(50) NOT NULL DEFAULT '',
@@ -70,7 +63,30 @@ sql = """
         share_url VARCHAR(8190) NOT NULL DEFAULT '',
         thumbnail_url VARCHAR(8190) NOT NULL DEFAULT '',
         delete_status varchar(20) DEFAULT NULL
-    );"""
+    );""" % db_prefix
+cursor = db.cursor()
+cursor.execute(sql)
+cursor.close()
+
+sql = """
+    CREATE TABLE IF NOT EXISTS %s_user (
+        user_id varchar(100) PRIMARY KEY NOT NULL,
+        password varchar(200) DEFAULT NULL,
+        name varchar(50) NOT NULL DEFAULT '',
+        nick_name varchar(50) NOT NULL DEFAULT '',
+        birthday DATETIME,
+        register_date DATETIME,
+        last_update_date DATETIME,
+        terms_status varchar(20) DEFAULT NULL,
+        gender varchar(20) NOT NULL DEFAULT '',
+        user_type varchar(20) NOT NULL DEFAULT '',
+        phone_number varchar(50) NOT NULL DEFAULT '',
+        postal_code varchar(50) NOT NULL DEFAULT '',
+        prefecture varchar(50) NOT NULL DEFAULT '',
+        city varchar(50) NOT NULL DEFAULT '',
+        house_number varchar(100) NOT NULL DEFAULT '',
+        building_number varchar(100) NOT NULL DEFAULT ''
+    );""" % db_prefix
 cursor = db.cursor()
 cursor.execute(sql)
 cursor.close()

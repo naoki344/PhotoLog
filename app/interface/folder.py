@@ -2,10 +2,16 @@
 
 import json
 
-from flask import Blueprint, request
+import flask_login
+from flask import Blueprint
+from flask import request
 
-from app.application.folder import FolderCommandService, FolderQueryService
+from app.application.folder import FolderCommandService
+from app.application.folder import FolderQueryService
+from lib.model.folder.folder import AuthorID
+from lib.model.folder.folder import FolderID
 from lib.model.folder.folder_factory import FolderFactory
+from lib.model.user.user import User
 
 app_folder = Blueprint('app_folder', __name__)
 
@@ -16,17 +22,20 @@ app_folder = Blueprint('app_folder', __name__)
 
 
 @app_folder.route('/', methods=['GET', 'POST'])
+#@flask_login.login_required
 def folder_index(user_id):
+
     folder_author_id = user_id
     if request.method == 'GET':
         folder_query_service = FolderQueryService()
-        user_folder_list = folder_query_service.find_user_all(folder_author_id)
+        user_folder_list = folder_query_service.find_user_all(
+            AuthorID(folder_author_id))
         folder_dict_list = user_folder_list.to_dict()
         json_txt = json.dumps(folder_dict_list, indent=4)
         return json_txt.encode("UTF-8")
 
     if request.method == 'POST':
-        post_data = request.form
+        post_data = request.json
         data = post_data.copy()
         folder_factory = FolderFactory()
         folder_obj = folder_factory.create(data)
@@ -43,11 +52,12 @@ def folder_index(user_id):
 
 
 @app_folder.route('/<path:folder_id>', methods=['GET', 'PUT', 'DELETE'])
+#@flask_login.login_required
 def folder(user_id, folder_id):
     folder_author_id = user_id
     if request.method == 'GET':
         folder_query_service = FolderQueryService()
-        folder_obj = folder_query_service.find(folder_id)
+        folder_obj = folder_query_service.find(FolderID(folder_id))
         if folder_obj == None:
             txt = 'folder do not exist'
             return txt.encode("UTF-8")
@@ -57,10 +67,10 @@ def folder(user_id, folder_id):
         return json_txt.encode("UTF-8")
 
     if request.method == 'PUT':
-        post_data = request.form
+        post_data = request.json
 
         folder_query_service = FolderQueryService()
-        org_folder = folder_query_service.find(folder_id)
+        org_folder = folder_query_service.find(FolderID(folder_id))
         if org_folder == None:
             txt = 'folder do not exist'
             return txt.encode("UTF-8")
@@ -75,10 +85,10 @@ def folder(user_id, folder_id):
         return json_txt.encode("UTF-8")
 
     if request.method == 'DELETE':
-        post_data = request.form
+        post_data = request.json
 
         folder_query_service = FolderQueryService()
-        org_folder = folder_query_service.find(folder_id)
+        org_folder = folder_query_service.find(FolderID(folder_id))
 
         folder_command_service = FolderCommandService()
         try:
