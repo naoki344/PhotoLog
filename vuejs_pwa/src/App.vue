@@ -1,11 +1,13 @@
 <template>
   <div id="app">
-    <header>
-      <span>Vue.js PWA</span>
-    </header>
+	<div class="c-header" >
+		<c-header></c-header>
+  	</div>
+	<div class="c-sidebar" >
+		<c-sidebar></c-sidebar>
+  	</div>
     <main>
-      <img src="./assets/logo.png" alt="Vue.js PWA">
-      <router-view></router-view>
+		<router-view></router-view>
     </main>
   </div>
 </template>
@@ -30,25 +32,24 @@ body {
 
 main {
   text-align: center;
-  margin-top: 40px;
-}
-
-header {
-  margin: 0;
-  height: 56px;
-  padding: 0 16px 0 24px;
-  background-color: #35495E;
-  color: #ffffff;
-}
-
-header span {
   display: block;
-  position: relative;
-  font-size: 20px;
-  line-height: 1;
-  letter-spacing: .02em;
-  font-weight: 400;
-  box-sizing: border-box;
-  padding-top: 16px;
+  padding-left: 230px;
+  padding-top: 3rem;
 }
+
+.c-sidebar {
+	position: fixed;
+	top: 4rem;
+	width: 230px;
+	height: calc( 100vh - 4rem );
+	overflow-y: auto;
+	margin-bottom: 0;
+}
+.c-header {
+	position: fixed;
+	width: 100%;
+	background-color: #fff;
+	z-index: 2;
+}
+
 </style>
