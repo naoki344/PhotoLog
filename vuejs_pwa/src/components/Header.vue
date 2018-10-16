@@ -33,22 +33,3 @@
     }
   }
 </script>
-
-<style>
-.el-menu-top {
-	padding-left: 230px;
-}
-</style>
-<!--style>
-.vs-navbar {
-	height: 3rem;
-}
-
-.vs-con-input {
-	margin-right: 10px;
-}
-
-.vs-con-input-label .vs-con-input .input-span-placeholder {
-	top: 0;
-}
-</style-->
