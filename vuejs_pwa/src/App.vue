@@ -1,14 +1,18 @@
 <template>
   <div id="app">
-	<div class="c-header" >
-		<c-header></c-header>
-  	</div>
-	<div class="c-sidebar" >
-		<c-sidebar></c-sidebar>
-  	</div>
-    <main>
-		<router-view></router-view>
-    </main>
+	  <el-container>
+		<el-aside style="width:230px; position: fixed; height:100vh;" >
+			<c-sidebar></c-sidebar>
+		</el-aside>
+		<el-container class="el-main-container">
+			<el-header >
+				<c-header></c-header>
+			</el-header>
+			<el-main>
+				<router-view></router-view>
+			</el-main>
+		</el-container>
+	  </el-container>
   </div>
 </template>
 
@@ -30,26 +34,18 @@ body {
   color: #2c3e50;
 }
 
-main {
-  text-align: center;
-  display: block;
-  padding-left: 230px;
-  padding-top: 3rem;
+.el-main-container {
+	padding-left: 230px;
 }
-
-.c-sidebar {
-	position: fixed;
-	top: 4rem;
-	width: 230px;
-	height: calc( 100vh - 4rem );
-	overflow-y: auto;
-	margin-bottom: 0;
-}
-.c-header {
+.el-header {
 	position: fixed;
 	width: 100%;
-	background-color: #fff;
-	z-index: 2;
+	padding:0;
+	height: 60px;
+}
+
+.el-main {
+	padding-top: 60px;
 }
 
 </style>
