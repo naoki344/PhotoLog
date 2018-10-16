@@ -1,9 +1,7 @@
 <template lang="html">
-<el-row class="tac">
-  <el-col :span="24">
     <el-menu
       default-active="2"
-      class="el-menu-vertical-demo"
+      class="el-menu-sidebar"
       @open="handleOpen"
       @close="handleClose">
       <el-submenu index="1">
@@ -25,7 +23,7 @@
       </el-submenu>
       <el-menu-item index="2">
         <i class="el-icon-menu"></i>
-        <span>Navigator Two</span>
+		<a href="/#/folder"><span>Navigator Two</span></a>
       </el-menu-item>
       <el-menu-item index="3" disabled>
         <i class="el-icon-document"></i>
@@ -36,8 +34,6 @@
         <span>Navigator Four</span>
       </el-menu-item>
     </el-menu>
-  </el-col>
-</el-row>
 </template>
 
 <script>
@@ -54,4 +50,7 @@
 </script>
 
 <style>
+.el-menu-sidebar {
+	height: 100vh;
+}
 </style>
