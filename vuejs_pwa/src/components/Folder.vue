@@ -1,26 +1,34 @@
 <template lang="html">
   <div class="centerx labelx">
-    <vs-input vs-label="フォルダー名" placeholder="フォルダーの表示名" v-model="folder_name"/>
-	<vs-textarea counter="20" label="フォルダーの説明" :counter-danger.sync="counterDanger" v-model="description" />
-    <vs-input vs-label="フォルダー名" placeholder="フォルダーの表示名" v-model="folder_"/>
+	<el-col :span="6"><el-input placeholder="Please input" v-model="input"></el-input></el-col>
+	<textarea>{{info}}</textarea>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   data () {
     return {
-      folder_name: '',
-      value2: '',
-      description: '',
-      counterDanger: false
+      input: '',
+      info: ''
     }
+  },
+  mounted () {
+    var config = {
+      headers: { 'Content-Type': 'application/json;charset=UTF-8', 'Access-Control-Allow-Origin': '*' }
+    }
+    axios
+      .get('http://localhost:5000/photo_log/miyoshi%40example.com/folder/', config)
+      .then(response => (this.info = response.data))
   }
 }
 </script>
 
 <style lang="scss">
 .labelx {
+	margin-top: 20px;
 	text-align: left;
 
 	.vs-input {
