@@ -7,6 +7,7 @@ import string
 import sys
 
 import flask_login
+from flask_cors import CORS
 from flask import Flask
 from flask import redirect
 from flask import request
@@ -21,6 +22,7 @@ from lib.model.user.user import UserID
 from lib.model.user.user_factory import UserFactory
 
 application = Flask(__name__)
+CORS(application, supports_credentials=True)
 application.register_blueprint(
     app_folder, url_prefix='/photo_log/<string:user_id>/folder')
 application.secret_key = "".join([
