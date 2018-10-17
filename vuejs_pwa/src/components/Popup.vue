@@ -12,10 +12,10 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       popupActivo: false
-    }
+    };
   }
-}
+};
 </script>

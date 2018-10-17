@@ -18,8 +18,8 @@
 
 <script>
 export default {
-  name: 'app'
-}
+  name: "app"
+};
 </script>
 
 <style>
@@ -28,24 +28,23 @@ body {
 }
 
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
 }
 
 .el-main-container {
-	padding-left: 230px;
+  padding-left: 230px;
 }
 .el-header {
-	position: fixed;
-	width: 100%;
-	padding:0;
-	height: 60px;
+  position: fixed;
+  width: 100%;
+  padding: 0;
+  height: 60px;
 }
 
 .el-main {
-	padding-top: 60px;
+  padding-top: 60px;
 }
-
 </style>

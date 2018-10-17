@@ -37,18 +37,16 @@
 </template>
 
 <script>
-  export default {
-    methods: {
-      handleOpen (key, keyPath) {
-      },
-      handleClose (key, keyPath) {
-      }
-    }
+export default {
+  methods: {
+    handleOpen(key, keyPath) {},
+    handleClose(key, keyPath) {}
   }
+};
 </script>
 
 <style>
 .el-menu-sidebar {
-	height: 100vh;
+  height: 100vh;
 }
 </style>
