@@ -78,7 +78,6 @@ export default {
 };
 </script>
 
-
 <style lang="scss">
 .labelx {
   margin-top: 20px;
