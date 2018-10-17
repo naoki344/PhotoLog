@@ -12,7 +12,7 @@
     "e2e": "node test/e2e/runner.js",
     "test": "npm run unit && npm run e2e",
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs",
-	"precommit": "lint-staged"
+    "precommit": "lint-staged"
   },
   "lint-staged": {
     "*.js": [
@@ -99,6 +99,7 @@
     "vue-loader": "^13.3.0",
     "vue-style-loader": "^3.0.3",
     "vue-template-compiler": "^2.5.2",
+    "vuex": "^3.0.1",
     "webpack": "^3.7.1",
     "webpack-bundle-analyzer": "^2.9.0",
     "webpack-dev-middleware": "^1.12.0",

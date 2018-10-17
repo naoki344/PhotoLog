@@ -11,6 +11,8 @@ import ElementUI from "element-ui";
 import locale from "element-ui/lib/locale/lang/ja";
 import "element-ui/lib/theme-chalk/index.css";
 
+import store from "@/store";
+
 Vue.config.productionTip = false;
 Vue.component("c-sidebar", Sidebar);
 Vue.component("c-header", Header);
@@ -20,6 +22,7 @@ Vue.use(ElementUI, { locale });
 new Vue({
   el: "#app",
   router,
+  store,
   template: "<App/>",
   components: { App }
 });
