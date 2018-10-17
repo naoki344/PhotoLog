@@ -4,6 +4,7 @@ import Vue from 'vue';
 import router from './router';
 import App from './App';
 
+import store from '@/store';
 import Sidebar from '@/components/Sidebar';
 import Header from '@/components/Header';
 
@@ -20,6 +21,7 @@ Vue.use(ElementUI, { locale });
 new Vue({
   el: '#app',
   router,
+  store,
   template: '<App/>',
   components: { App }
 });
