@@ -2,8 +2,6 @@
 import copy
 from datetime import datetime
 from enum import Enum
-
-
 '''
 Value Object : ID
 '''
@@ -117,7 +115,7 @@ class ThumbnailUrl:
 
 
 '''
-Value Object : DeleteFlag
+Value Object : DeleteStatus
 '''
 
 
@@ -212,7 +210,7 @@ class Folder:
             new_folder.thumbnail_url = ThumbnailUrl(dict_data['thumbnail_url'])
 
         if dict_data.get('delete_status') is not None:
-            new_folder.delete_status = DeleteFlag[dict_data['delete_status']]
+            new_folder.delete_status = DeleteStatus[dict_data['delete_status']]
 
         new_folder.last_update_date = LastUpdateDate(now_time)
 

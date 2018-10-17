@@ -23,6 +23,7 @@ from lib.model.user.user_factory import UserFactory
 
 application = Flask(__name__)
 CORS(application, supports_credentials=True)
+
 application.register_blueprint(
     app_folder, url_prefix='/photo_log/<string:user_id>/folder')
 application.secret_key = "".join([
