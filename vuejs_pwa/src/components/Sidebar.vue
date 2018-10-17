@@ -39,8 +39,8 @@
 <script>
 export default {
   methods: {
-    handleOpen(key, keyPath) {},
-    handleClose(key, keyPath) {}
+    handleOpen (key, keyPath) {},
+    handleClose (key, keyPath) {}
   }
 };
 </script>

@@ -29,30 +29,30 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios';
 
 export default {
-  data() {
+  data () {
     return {
-      server_url: "http://localhost:5000/photo_log",
-      folder_id: "",
+      server_url: 'http://localhost:5000/photo_log',
+      folder_id: '',
       folder_form: {
-        folder_id: "",
-        name: "",
-        release_status: ""
+        folder_id: '',
+        name: '',
+        release_status: ''
       },
-      info: ""
+      info: ''
     };
   },
-  mounted() {
+  mounted () {
     var config = {
       headers: {
-        "Content-Type": "application/json;charset=UTF-8",
-        "Access-Control-Allow-Origin": "*"
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Access-Control-Allow-Origin': '*'
       }
     };
     axios
-      .get(this.server_url + "/miyoshi%40example.com/folder/", config)
+      .get(this.server_url + '/miyoshi%40example.com/folder/', config)
       .then(response => {
         var folders = response.data;
         this.folder_form = folders[0];
@@ -61,16 +61,16 @@ export default {
       });
   },
   methods: {
-    onSubmit() {
+    onSubmit () {
       axios
         .put(
-          this.server_url + "/miyoshi%40example.com/folder/" + this.folder_id,
+          this.server_url + '/miyoshi%40example.com/folder/' + this.folder_id,
           this.folder_form
         )
         .then(response => {
           this.$message({
-            message: "Folder Info Update Sucsess",
-            type: "success"
+            message: 'Folder Info Update Sucsess',
+            type: 'success'
           });
         });
     }
