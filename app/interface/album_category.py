@@ -8,7 +8,8 @@ from flask import request
 
 from app.application.album_category import AlbumCategoryCommandService
 from app.application.album_category import AlbumCategoryQueryService
-from lib.model.category.category import AuthorID
+from lib.model.info.info import AuthorID
+from lib.model.album.album import AlbumID
 from lib.model.category.category import CategoryID
 from lib.model.category.category import CategoryType
 from lib.model.category.category_factory import CategoryFactory
@@ -27,6 +28,7 @@ app_album_category = Blueprint('app_album_category', __name__)
 def album_category_index(user_id, album_id):
 
     album_category_author_id = user_id
+    album_id = AlbumID(album_id)
     if request.method == 'GET':
         album_category_query_service = AlbumCategoryQueryService()
         user_album_category_list = album_category_query_service.find_user_all(
@@ -40,16 +42,15 @@ def album_category_index(user_id, album_id):
         data = post_data.copy()
         data['category_type'] = CategoryType.ALBUM.name
         category_factory = CategoryFactory()
-        album_category_obj = category_factory.create(data)
-        if album_category_obj is False:
+        album_category = category_factory.create(data)
+        if album_category is False:
             txt = 'album_category can not create'
             return txt.encode("UTF-8")
 
         album_category_command_service = AlbumCategoryCommandService()
-        registerd_album_category = album_category_command_service.register(
-            album_category_obj)
+        album_category_command_service.register(album_id, album_category)
 
-        album_category_dict = registerd_album_category.to_dict()
+        album_category_dict = album_category.to_dict()
         json_txt = json.dumps(album_category_dict, indent=4)
         return json_txt.encode("UTF-8")
 
@@ -58,6 +59,7 @@ def album_category_index(user_id, album_id):
     '/<path:album_category_id>', methods=['GET', 'PUT', 'DELETE'])
 # @flask_login.login_required
 def album_category(user_id, album_id, album_category_id):
+    album_id = AlbumID(album_id)
     if request.method == 'GET':
         album_category_query_service = AlbumCategoryQueryService()
         album_category_obj = album_category_query_service.find(
@@ -83,12 +85,12 @@ def album_category(user_id, album_id, album_category_id):
         new_album_category = org_album_category.modify(post_data)
 
         album_category_command_service = AlbumCategoryCommandService()
-        updated_album_category = album_category_command_service.update(
-            org_album_category, new_album_category)
-
-        album_category_dict = updated_album_category.to_dict()
-        json_txt = json.dumps(album_category_dict, indent=4)
-        return json_txt.encode("UTF-8")
+        result = album_category_command_service.update(org_album_category,
+                                                       new_album_category)
+        if result is True:
+            album_category_dict = new_album_category.to_dict()
+            json_txt = json.dumps(album_category_dict, indent=4)
+            return json_txt.encode("UTF-8")
 
     if request.method == 'DELETE':
         post_data = request.json
@@ -99,11 +101,10 @@ def album_category(user_id, album_id, album_category_id):
 
         album_category_command_service = AlbumCategoryCommandService()
         try:
-            deleted_album_category = album_category_command_service.delete(
-                org_album_category)
+            album_category_command_service.delete(album_id, org_album_category)
         except:
-            msg = 'album_category[' + org_album_category.album_category_id.value + '] delete is failuer'
+            msg = 'album_category[' + org_album_category.category_id.value + '] delete is failuer'
             return msg.encode("UTF-8")
 
-        json_txt = json.dumps(deleted_album_category, indent=4)
+        json_txt = json.dumps(org_album_category.to_dict(), indent=4)
         return json_txt.encode("UTF-8")

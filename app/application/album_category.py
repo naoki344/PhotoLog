@@ -5,10 +5,12 @@ import json
 import os
 import sys
 
+from lib.model.info.info import AuthorID
 from app.infrastructure.category import CategoryDataSource
-from app.infrastructure.album_content import AlbumContentDataSource
+from app.application.album_content import AlbumContentCommandService
+from app.application.album_content import AlbumContentQueryService
 from lib.model.album.album import AlbumID
-from lib.model.category.category import AuthorID
+from lib.model.album_content.album_content_factory import AlbumContentFactory
 from lib.model.category.category import AlbumCategory
 from lib.model.category.category import CategoryID
 from lib.model.category.category import CategoryType
@@ -20,7 +22,6 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/../..')
 class AlbumCategoryQueryService:
     def __init__(self):
         self.album_category_datasource = CategoryDataSource()
-        self.album_content_datasource = AlbumContentDataSource()
 
     def find_user_all(self, author_id: AuthorID):
         album_categorys = self.album_category_datasource.find_user_all(
@@ -38,23 +39,33 @@ class AlbumCategoryQueryService:
 class AlbumCategoryCommandService:
     def __init__(self):
         self.album_category_datasource = CategoryDataSource()
+        self.album_content_command_service = AlbumContentCommandService()
+        self.album_content_query_service = AlbumContentQueryService()
 
-    def register(self, album_category: AlbumCategory, album_id: AlbumID):
+    def register(self, album_id: AlbumID, album_category: AlbumCategory):
         self.album_category_datasource.register(album_category)
         # album_contentに登録する
-        self.album_content_datasource.register(AlbumID, AlbumCategory)
-        return album_category
+        # albumcontentを渡すようにする
+        data = {}
+        data['album_id'] = album_id
+        data['content'] = album_category
+        album_content_factory = AlbumContentFactory()
+        album_content = album_content_factory.create(data)
+        self.album_content_service.register(album_content)
 
     def update(self, org_album_category: AlbumCategory,
                new_album_category: AlbumCategory):
         if org_album_category.can_update():
-            updated_album_category = self.album_category_datasource.update(
-                new_album_category)
-        return updated_album_category
+            self.album_category_datasource.update(new_album_category)
+            return True
+        return False
 
-    def delete(self, album_category: AlbumCategory):
-        if album_category.can_delete():
-            deleted_album_category = self.album_category_datasource.delete(
-                album_category)
-            self.album_content_datasource.delete(AlbumID, AlbumCategory)
-        return deleted_album_category
+    def delete(self, album_id: AlbumID, album_category: AlbumCategory):
+        if album_category.can_delete() is False:
+            return False
+        self.album_category_datasource.delete(album_category)
+        album_content = self.album_content_query_service.find(
+            album_id, album_category.category_id)
+        # albumcontentを渡すようにする
+        self.album_content_command_service.delete(album_content)
+        return True

@@ -5,14 +5,12 @@ import json
 import os
 import sys
 
+from lib.model.info.info import AuthorID
 from app.infrastructure.category import CategoryDataSource
-from lib.model.category.category import AuthorID
 from lib.model.category.category import CommonCategory
 from lib.model.category.category import CategoryID
 from lib.model.category.category import CategoryType
 from lib.model.category.category_list import CategoryList
-
-sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/../..')
 
 
 class CommonCategoryQueryService:

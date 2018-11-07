@@ -23,10 +23,10 @@ sql = """
         register_date DATETIME NOT NULL,
         last_update_date DATETIME NOT NULL,
         release_status varchar(20) DEFAULT NULL,
-        share_range varchar(20) DEFAULT NULL,
-        share_url VARCHAR(8190) NOT NULL DEFAULT '',
         thumbnail_url VARCHAR(8190) NOT NULL DEFAULT '',
-        delete_status varchar(20) DEFAULT NULL
+        delete_status varchar(20) DEFAULT NULL,
+        share_range varchar(20) DEFAULT NULL,
+        share_password VARCHAR(400) NOT NULL DEFAULT ''
     );""" % db_prefix
 cursor = db.cursor()
 cursor.execute(sql)
@@ -35,17 +35,17 @@ cursor.close()
 sql = """
     CREATE TABLE IF NOT EXISTS %s_category (
         category_id varchar(100) PRIMARY KEY NOT NULL,
+        category_type varchar(20) DEFAULT NULL,
         author_id varchar(100) DEFAULT NULL,
         name varchar(50) NOT NULL DEFAULT '',
         description varchar(500) NOT NULL DEFAULT '',
         register_date DATETIME,
         last_update_date DATETIME,
         release_status varchar(20) DEFAULT NULL,
-        category_type varchar(20) DEFAULT NULL,
-        share_range varchar(20) DEFAULT NULL,
-        share_url VARCHAR(8190) NOT NULL DEFAULT '',
         thumbnail_url VARCHAR(8190) NOT NULL DEFAULT '',
-        delete_status varchar(20) DEFAULT NULL
+        delete_status varchar(20) DEFAULT NULL,
+        share_range varchar(20) DEFAULT NULL,
+        share_password VARCHAR(400) NOT NULL DEFAULT ''
     );""" % db_prefix
 cursor = db.cursor()
 cursor.execute(sql)
@@ -55,7 +55,6 @@ sql = """
     CREATE TABLE IF NOT EXISTS %s_album_content (
         album_id varchar(100) NOT NULL,
         content_id varchar(100) NOT NULL,
-        content_type varchar(20) DEFAULT NULL,
         delete_status varchar(20) DEFAULT NULL,
         PRIMARY KEY(album_id,content_id)
     );""" % db_prefix
@@ -72,10 +71,10 @@ sql = """
         register_date DATETIME,
         last_update_date DATETIME,
         release_status varchar(20) DEFAULT NULL,
-        share_range varchar(20) DEFAULT NULL,
-        share_url VARCHAR(8190) NOT NULL DEFAULT '',
         thumbnail_url VARCHAR(8190) NOT NULL DEFAULT '',
-        delete_status varchar(20) DEFAULT NULL
+        delete_status varchar(20) DEFAULT NULL,
+        share_range varchar(20) DEFAULT NULL,
+        share_password VARCHAR(400) NOT NULL DEFAULT ''
     );""" % db_prefix
 cursor = db.cursor()
 cursor.execute(sql)
@@ -84,7 +83,7 @@ cursor.close()
 sql = """
     CREATE TABLE IF NOT EXISTS %s_user (
         user_id varchar(100) PRIMARY KEY NOT NULL,
-        password varchar(200) DEFAULT NULL,
+        password varchar(400) DEFAULT NULL,
         name varchar(50) NOT NULL DEFAULT '',
         nick_name varchar(50) NOT NULL DEFAULT '',
         birthday DATETIME,

@@ -8,8 +8,8 @@ from flask import request
 
 from app.application.common_category import CommonCategoryCommandService
 from app.application.common_category import CommonCategoryQueryService
-from lib.model.category.category import AuthorID
 from lib.model.category.category import CategoryID
+from lib.model.info.info import AuthorID
 from lib.model.category.category import CategoryType
 from lib.model.category.category_factory import CategoryFactory
 from lib.model.user.user import User

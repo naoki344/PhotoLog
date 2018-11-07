@@ -17,6 +17,10 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/../../')
 from app.application.user import UserFindService
 from app.application.user import UserRegisterService
 from app.interface.folder import app_folder
+from app.interface.album import app_album
+from app.interface.common_category import app_common_category
+from app.interface.album_category import app_album_category
+from app.interface.album_content import app_album_content
 from lib.model.user.user import User
 from lib.model.user.user import UserID
 from lib.model.user.user_factory import UserFactory
@@ -24,12 +28,26 @@ from lib.model.user.user_factory import UserFactory
 application = Flask(__name__)
 CORS(application, supports_credentials=True)
 
-application.register_blueprint(
-    app_folder, url_prefix='/photo_log/<string:user_id>/folder')
 application.secret_key = "".join([
     random.choice(string.ascii_letters + string.digits + '_' + '-' + '!' +
                   '#' + '&') for i in range(64)
 ])
+
+application.register_blueprint(
+    app_folder, url_prefix='/<string:user_id>/folder')
+
+application.register_blueprint(app_album, url_prefix='/<string:user_id>/album')
+
+application.register_blueprint(
+    app_album_category,
+    url_prefix='/<string:user_id>/album/<string:album_id>/album_category/')
+
+application.register_blueprint(
+    app_album_content,
+    url_prefix='/<string:user_id>/album/<string:album_id>/album_content/')
+
+application.register_blueprint(
+    app_common_category, url_prefix='/<string:user_id>/common_category')
 
 #############################################################
 # user_loginがBlueprintに対応していないため、mainに記入する #
@@ -38,7 +56,7 @@ login_manager = flask_login.LoginManager()
 login_manager.init_app(application)
 
 
-@application.route('/photo_log/user/login', methods=['GET', 'POST'])
+@application.route('/user/login', methods=['GET', 'POST'])
 def user_login():
     if request.method == 'GET':
         return '''

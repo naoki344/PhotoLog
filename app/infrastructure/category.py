@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from lib.model.category.category import AuthorID
-from lib.model.category.category import DeleteStatus
+from lib.model.info.info import AuthorID
+from lib.model.info.info import DeleteStatus
 from lib.model.category.category import Category
 from lib.model.category.category import CategoryType
 from lib.model.category.category import CategoryID
-from lib.model.category.category_repository import CategoryRepository
 
 from .datasource import DataSource
 
 
-class CategoryDataSource(CategoryRepository):
+class CategoryDataSource:
     def __init__(self):
         self.datasource = DataSource()
         self.db_prefix = self.datasource.get_prefix()
@@ -41,35 +40,89 @@ class CategoryDataSource(CategoryRepository):
         return category_obj
 
     def register(self, category: Category):
-        sql = 'INSERT INTO {}_category(category_id,author_id,name,description,register_date,last_update_date,release_status,category_type,share_range,share_url,thumbnail_url,delete_status) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ;'.format(
+        sql = 'INSERT INTO {}_category(category_id,category_type,author_id,name,description,register_date,last_update_date,release_status,thumbnail_url,delete_status,share_range,share_password) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ;'.format(
             self.db_prefix)
-        parameter = [
-            category.category_id.value, category.author_id.value,
-            category.name.value, category.description.value,
-            category.register_date.value, category.last_update_date.value,
-            category.release_status.name, category.category_type.name,
-            category.share_range.name, category.share_url.value,
-            category.thumbnail_url.value, category.delete_status.name
-        ]
-        category_id = self.datasource.insert(sql, parameter, True)
 
-        return category_id
+        if category.category_type is CategoryType.COMMON:
+            parameter = [
+                category.category_id.value,
+                category.category_type.name,
+                category.info.author_id.value,
+                category.info.name.value,
+                category.info.description.value,
+                category.info.register_date.value,
+                category.info.last_update_date.value,
+                category.info.release_status.name,
+                category.info.thumbnail_url.value,
+                category.info.delete_status.name,
+                category.share.share_range.name,
+                category.share.share_password.value,
+            ]
+            category_id = self.datasource.insert(sql, parameter, True)
+            return category_id
+
+        if category.category_type is CategoryType.ALBUM:
+            parameter = [
+                category.category_id.value,
+                category.category_type.name,
+                category.info.author_id.value,
+                category.info.name.value,
+                category.info.description.value,
+                category.info.register_date.value,
+                category.info.last_update_date.value,
+                category.info.release_status.name,
+                category.info.thumbnail_url.value,
+                category.info.delete_status.name,
+                '',
+                '',
+            ]
+            category_id = self.datasource.insert(sql, parameter, True)
+            return category_id
+
+        return False
 
     def update(self, category: Category):
-        sql = 'UPDATE {}_category SET author_id=%s,name=%s,description=%s,register_date=%s,last_update_date=%s,release_status=%s,category_type=%s,share_range=%s,share_url=%s,thumbnail_url=%s,delete_status=%s WHERE category_id=%s;'.format(
+        sql = 'UPDATE {}_category SET category_type=%s,author_id=%s,name=%s,description=%s,register_date=%s,last_update_date=%s,release_status=%s,thumbnail_url=%s,delete_status=%s,share_range=%s,share_password=%s WHERE category_id=%s;'.format(
             self.db_prefix)
-        parameter = [
-            category.author_id.value, category.name.value,
-            category.description.value, category.register_date.value,
-            category.last_update_date.value, category.release_status.name,
-            category.category_type.name, category.share_range.name,
-            category.share_url.value, category.thumbnail_url.value,
-            category.delete_status.name, category.category_id.value
-        ]
-        self.datasource.update(sql, parameter, True)
-        category_id = category.category_id
+        if category.category_type is CategoryType.COMMON:
+            parameter = [
+                category.category_type.name,
+                category.info.author_id.value,
+                category.info.name.value,
+                category.info.description.value,
+                category.info.register_date.value,
+                category.info.last_update_date.value,
+                category.info.release_status.name,
+                category.info.thumbnail_url.value,
+                category.info.delete_status.name,
+                category.share.share_range.name,
+                category.share.share_password.value,
+                category.category_id.value,
+            ]
+            self.datasource.update(sql, parameter, True)
+            category_id = category.category_id
+            return self.find(category_id)
 
-        return self.find(category_id)
+        if category.category_type is CategoryType.ALBUM:
+            parameter = [
+                category.category_type.name,
+                category.info.author_id.value,
+                category.info.name.value,
+                category.info.description.value,
+                category.info.register_date.value,
+                category.info.last_update_date.value,
+                category.info.release_status.name,
+                category.info.thumbnail_url.value,
+                category.info.delete_status.name,
+                '',
+                '',
+                category.category_id.value,
+            ]
+            self.datasource.update(sql, parameter, True)
+            category_id = category.category_id
+            return self.find(category_id)
+
+        return False
 
     def delete(self, category: Category):
         category_id = category.category_id.value

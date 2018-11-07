@@ -1,125 +1,22 @@
 # -*- coding: utf-8 -*-
 import copy
 from datetime import datetime
-from enum import Enum
 from abc import ABC
+from abc import abstractmethod
+from enum import Enum
+
+from lib.model.content import Content
+from lib.model.content import ContentID
+from lib.model.info.info import Info
+from lib.model.share.share import Share
+'''
+Value Object : ID
+'''
 
 
-class CategoryID:
-    def __init__(self, category_id):
+class CategoryID(ContentID):
+    def __init__(self, category_id: str):
         self.value = category_id
-
-
-'''
-Value Object : AuthorID
-'''
-
-
-class AuthorID:
-    def __init__(self, user_id):
-        self.value = user_id
-
-
-'''
-Value Object : Name
-'''
-
-
-class Name:
-    def __init__(self, name):
-        self.value = name
-
-
-'''
-Value Object : Description
-'''
-
-
-class Description:
-    def __init__(self, description_txt):
-        self.value = description_txt
-
-    def __check_character_limit(self):
-        return True
-
-    #文字数のチェック
-
-
-'''
-Value Object : LastUpdateDate
-'''
-
-
-class LastUpdateDate:
-    def __init__(self, date=None):
-        self.value = date
-
-    def datetime_string(self):
-        return self.value.isoformat()
-
-
-'''
-Value Object : RegisterDate
-'''
-
-
-class RegisterDate:
-    def __init__(self, date=None):
-        self.value = date
-
-    def datetime_string(self):
-        return self.value.isoformat()
-
-
-'''
-Value Object : ReleaseStatus
-'''
-
-
-class ReleaseStatus(Enum):
-    OPEN = 1
-    CLOSE = 2
-
-
-'''
-Value Object : ShareRange
-'''
-
-
-class ShareRange(Enum):
-    PRIVATE = 1
-    PUBLIC = 2
-    PASSFRASE = 3
-
-
-'''
-Value Object : ShareUrl
-'''
-
-
-class ShareUrl:
-    def __init__(self, share_url):
-        self.value = share_url
-
-
-'''
-Value Object : ThumbnailUrl
-'''
-
-
-class ThumbnailUrl:
-    def __init__(self, thumbnail_url):
-        self.value = thumbnail_url
-
-
-'''
-Value Object : DeleteStatus
-'''
-
-
-class DeleteStatus(Enum):
-    UNDELETED = 0
-    DELETED = 1
 
 
 '''
@@ -132,41 +29,51 @@ class CategoryType(Enum):
     ALBUM = 2
 
 
-class Category():
-    def __init__(self, category_id: CategoryID, author_id: AuthorID,
-                 name: Name, description: Description,
-                 last_update_date: LastUpdateDate, register_date: RegisterDate,
-                 release_status: ReleaseStatus, category_type: CategoryType,
-                 share_range: ShareRange, share_url: ShareUrl,
-                 thumbnail_url: ThumbnailUrl, delete_status: DeleteStatus):
+# カテゴリーを継承させるのであれば、CommonCategoryはCategory かつAlbumCategoryもCategoryでないといけない
+# Is A の関係
+# Has A の関係にしてはどうだろうか
+#
+# CommonCategoryもAlbumCategoryもカテゴリーです！！
+
+
+class Category(Content, ABC):
+    def __init__(self):
+        pass
+
+    @abstractmethod
+    def to_dict(self):
+        pass
+
+    @staticmethod
+    @abstractmethod
+    def from_dict(dict_data: dict) -> 'Category':
+        if dict_data['category_type'] == 'COMMON':
+            return CommonCategory.from_dict(dict_data)
+        if dict_data['category_type'] == 'ALBUM':
+            return AlbumCategory.from_dict(dict_data)
+
+    def get_content_id(self):
+        return self.category_id
+
+    def get_content_type(self):
+        return 'Category'
+
+
+class CommonCategory(Category):
+    def __init__(self, category_id: CategoryID, category_type: CategoryType,
+                 info: Info, share: Share):
 
         self.category_id = category_id
-        self.author_id = author_id
-        self.name = name
-        self.description = description
-        self.register_date = register_date
-        self.last_update_date = last_update_date
-        self.release_status = release_status
         self.category_type = category_type
-        self.share_range = share_range
-        self.share_url = share_url
-        self.thumbnail_url = thumbnail_url
-        self.delete_status = delete_status
+        self.info = info
+        self.share = share
 
     def to_dict(self):
         return {
-            "category_id": self.category_id.value,
-            "author_id": self.author_id.value,
-            "name": self.name.value,
-            "description": self.description.value,
-            "register_date": self.register_date.datetime_string(),
-            "last_update_date": self.last_update_date.datetime_string(),
-            "release_status": self.release_status.name,
-            "category_type": self.category_type.name,
-            "share_range": self.share_range.name,
-            "share_url": self.share_url.value,
-            "thumbnail_url": self.thumbnail_url.value,
-            "delete_status": self.delete_status.name,
+            'category_id': self.category_id.value,
+            'category_type': self.category_type.name,
+            'info': self.info.to_dict(),
+            'share': self.share.to_dict(),
         }
 
     def can_delete(self):
@@ -176,73 +83,59 @@ class Category():
         return True
 
     @staticmethod
-    def from_dict(dict_data: dict) -> 'Category':
-        data = [
-            CategoryID(dict_data["category_id"]),
-            AuthorID(dict_data["author_id"]),
-            Name(dict_data["name"]),
-            Description(dict_data["description"]),
-            LastUpdateDate(dict_data["last_update_date"]),
-            RegisterDate(dict_data['register_date']),
-            ReleaseStatus[dict_data["release_status"]],
-            CategoryType[dict_data["category_type"]],
-            ShareRange[dict_data["share_range"]],
-            ShareUrl(dict_data["share_url"]),
-            ThumbnailUrl(dict_data["thumbnail_url"]),
-            DeleteStatus[dict_data["delete_status"]],
-        ]
+    def from_dict(dict_data: dict) -> 'CommonCategory':
+        return CommonCategory(
+            category_id=CategoryID(dict_data["category_id"]),
+            category_type=CategoryType[dict_data["category_type"]],
+            info=Info.from_dict(dict_data),
+            share=Share.from_dict(dict_data),
+        )
 
-        if CategoryType[dict_data["category_type"]] is CategoryType.COMMON:
-            category_obj = CommonCategory(*data)
-            return category_obj
-        if CategoryType[dict_data["category_type"]] is CategoryType.ALBUM:
-            category_obj = AlbumCategory(*data)
-            return category_obj
+    def modify(self, dict_data) -> 'CommonCategory':
+        new_common_category = copy.deepcopy(self)
 
-    def modify(self, dict_data) -> 'Category':
-        now_time = datetime.now()
+        if dict_data.get('info') is not None:
+            new_common_category.info = self.info.modify(dict_data['info'])
 
-        new_category = copy.deepcopy(self)
+        if dict_data.get('share') is not None:
+            new_common_category.share = self.share.modify(dict_data['share'])
 
-        if dict_data.get('author_id') is not None:
-            new_category.author_id = AuthorID(dict_data['author_id'])
-
-        if dict_data.get('name') is not None:
-            new_category.name = Name(dict_data['name'])
-
-        if dict_data.get('description') is not None:
-            new_category.description = Description(dict_data['description'])
-
-        if dict_data.get('release_status') is not None:
-            new_category.release_status = ReleaseStatus[
-                dict_data['release_status']]
-
-        if dict_data.get('category_type') is not None:
-            new_category.category_type = CategoryType[
-                dict_data['category_type']]
-
-        if dict_data.get('share_range') is not None:
-            new_category.share_range = ShareRange[dict_data['share_range']]
-
-        if dict_data.get('share_url') is not None:
-            new_category.share_url = ShareUrl(dict_data['share_url'])
-
-        if dict_data.get('thumbnail_url') is not None:
-            new_category.thumbnail_url = ThumbnailUrl(
-                dict_data['thumbnail_url'])
-
-        if dict_data.get('delete_status') is not None:
-            new_category.delete_status = DeleteStatus[
-                dict_data['delete_status']]
-
-        new_category.last_update_date = LastUpdateDate(now_time)
-
-        return new_category
-
-
-class CommonCategory(Category):
-    pass
+        return new_common_category
 
 
 class AlbumCategory(Category):
-    pass
+    def __init__(self, category_id: CategoryID, category_type: CategoryType,
+                 info: Info):
+
+        self.category_id = category_id
+        self.category_type = category_type
+        self.info = info
+
+    def to_dict(self):
+        return {
+            'category_id': self.category_id.value,
+            'category_type': self.category_type.name,
+            'info': self.info.to_dict(),
+        }
+
+    def can_delete(self):
+        return True
+
+    def can_update(self):
+        return True
+
+    @staticmethod
+    def from_dict(dict_data: dict) -> 'AlbumCategory':
+        return AlbumCategory(
+            category_id=CategoryID(dict_data["category_id"]),
+            category_type=CategoryType[dict_data["category_type"]],
+            info=Info.from_dict(dict_data),
+        )
+
+    def modify(self, dict_data) -> 'AlbumCategory':
+        new_album_category = copy.deepcopy(self)
+
+        if dict_data.get('info') is not None:
+            new_album_category.info = self.info.modify(dict_data['info'])
+
+        return new_album_category

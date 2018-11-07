@@ -6,12 +6,10 @@ import os
 import sys
 
 from app.infrastructure.album import AlbumDataSource
-from lib.model.album.album import AuthorID
+from lib.model.info.info import AuthorID
 from lib.model.album.album import Album
 from lib.model.album.album import AlbumID
 from lib.model.album.album_list import AlbumList
-
-sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/../..')
 
 
 class AlbumQueryService:
@@ -25,7 +23,7 @@ class AlbumQueryService:
 
     def find(self, album_id: AlbumID):
         album = self.album_datasource.find(album_id)
-        if album == None:
+        if album is None:
             return None
         return album
 

@@ -8,7 +8,7 @@ from flask import request
 
 from app.application.album import AlbumCommandService
 from app.application.album import AlbumQueryService
-from lib.model.album.album import AuthorID
+from lib.model.info.info import AuthorID
 from lib.model.album.album import AlbumID
 from lib.model.album.album_factory import AlbumFactory
 from lib.model.user.user import User

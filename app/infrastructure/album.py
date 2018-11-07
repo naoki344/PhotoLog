@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 
-from lib.model.album.album import AuthorID
-from lib.model.album.album import DeleteStatus
+from lib.model.info.info import AuthorID
+from lib.model.info.info import DeleteStatus
 from lib.model.album.album import Album
 from lib.model.album.album import AlbumID
-from lib.model.album.album_repository import AlbumRepository
 
 from .datasource import DataSource
 
 
-class AlbumDataSource(AlbumRepository):
+class AlbumDataSource():
     def __init__(self):
         self.datasource = DataSource()
         self.db_prefix = self.datasource.get_prefix()
@@ -39,14 +38,20 @@ class AlbumDataSource(AlbumRepository):
         return album_obj
 
     def register(self, album: Album):
-        sql = 'INSERT INTO {}_album(album_id,author_id,name,description,register_date,last_update_date,release_status,share_range,share_url,thumbnail_url,delete_status) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ;'.format(
+        sql = 'INSERT INTO {}_album(album_id,author_id,name,description,register_date,last_update_date,release_status,thumbnail_url,delete_status,share_range,share_password) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ;'.format(
             self.db_prefix)
         parameter = [
-            album.album_id.value, album.author_id.value, album.name.value,
-            album.description.value, album.register_date.value,
-            album.last_update_date.value, album.release_status.name,
-            album.share_range.name, album.share_url.value,
-            album.thumbnail_url.value, album.delete_status.name
+            album.album_id.value,
+            album.info.author_id.value,
+            album.info.name.value,
+            album.info.description.value,
+            album.info.register_date.value,
+            album.info.last_update_date.value,
+            album.info.release_status.name,
+            album.info.thumbnail_url.value,
+            album.info.delete_status.name,
+            album.share.share_range.name,
+            album.share.share_password.value,
         ]
         album_id = self.datasource.insert(sql, parameter, True)
 
@@ -56,11 +61,12 @@ class AlbumDataSource(AlbumRepository):
         sql = 'UPDATE {}_album SET author_id=%s,name=%s,description=%s,register_date=%s,last_update_date=%s,release_status=%s,share_range=%s,share_url=%s,thumbnail_url=%s,delete_status=%s WHERE album_id=%s;'.format(
             self.db_prefix)
         parameter = [
-            album.author_id.value, album.name.value, album.description.value,
-            album.register_date.value, album.last_update_date.value,
-            album.release_status.name, album.share_range.name,
-            album.share_url.value, album.thumbnail_url.value,
-            album.delete_status.name, album.album_id.value
+            album.info.author_id.value, album.info.name.value,
+            album.info.description.value, album.info.register_date.value,
+            album.info.last_update_date.value, album.info.release_status.name,
+            album.info.thumbnail_url.value, album.share.share_range.name,
+            album.share.share_url.value, album.info.delete_status.name,
+            album.album_id.value
         ]
         self.datasource.update(sql, parameter, True)
         album_id = album.album_id

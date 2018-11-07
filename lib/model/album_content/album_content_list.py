@@ -5,32 +5,29 @@ from enum import Enum
 from lib.model.info.info import DeleteStatus
 from lib.model.content import ContentID
 from lib.model.content import Content
+from lib.model.content import ContentList
 from lib.model.album.album import AlbumID
 
 
-class AlbumContent:
-    def __init__(self, album_id: AlbumID, content: Content,
-                 delete_status: DeleteStatus):
+class AlbumContentList:
+    def __init__(self, album_id: AlbumID, content_list: ContentList):
 
         self.album_id = album_id
-        self.content = content
-        self.delete_status = delete_status
+        self.content_list = content_list
 
     def to_dict(self):
         return {
             "album_id": self.album_id.value,
-            "content": self.content.to_dict(),
-            "delete_status": self.delete_status.name
+            "content_list": self.content_list.to_dict(),
         }
 
     def can_delete(self):
         return True
 
     @staticmethod
-    def from_dict(dict_data: dict) -> 'AlbumContent':
+    def from_dict(dict_data: dict) -> 'AlbumContentList':
         data = (
             dict_data["album_id"],
-            dict_data['content_obj'],
-            dict_data['delete_status'],
+            ContentList(dict_data['content_obj_list']),
         )
-        return AlbumContent(*data)
+        return AlbumContentList(*data)
