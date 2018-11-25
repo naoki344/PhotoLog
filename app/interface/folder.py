@@ -8,6 +8,7 @@ from flask import request
 
 from app.application.folder import FolderCommandService
 from app.application.folder import FolderQueryService
+from app.application.file import FileQueryService
 from lib.model.folder.folder_factory import FolderFactory
 from lib.model.info.info import AuthorID
 from lib.model.folder.folder import FolderID
@@ -98,4 +99,22 @@ def folder(user_id, folder_id):
             return msg.encode("UTF-8")
 
         json_txt = json.dumps(deleted_folder, indent=4)
+        return json_txt.encode("UTF-8")
+
+
+@app_folder.route('/<path:folder_id>/file', methods=['GET'])
+def folder_file(user_id, folder_id):
+    folder_author_id = user_id
+    if request.method == 'GET':
+        folder_query_service = FolderQueryService()
+        folder_obj = folder_query_service.find(FolderID(folder_id))
+        if folder_obj is None:
+            txt = 'folder do not exist'
+            return txt.encode("UTF-8")
+
+        file_query_service = FileQueryService()
+        file_list = file_query_service.find_by_folder(folder_obj)
+
+        file_list = file_list.to_dict()
+        json_txt = json.dumps(file_list, indent=4)
         return json_txt.encode("UTF-8")

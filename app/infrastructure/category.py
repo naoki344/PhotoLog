@@ -24,7 +24,6 @@ class CategoryDataSource:
             category_obj = self._to_category_obj(category_row)
             category_obj_list.append(category_obj)
 
-        print(category_obj_list[0])
         return category_obj_list
 
     def find(self, category_id: CategoryID):

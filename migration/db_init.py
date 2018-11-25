@@ -52,6 +52,16 @@ cursor.execute(sql)
 cursor.close()
 
 sql = """
+    CREATE TABLE IF NOT EXISTS %s_category_folder_link (
+        category_id varchar(100) NOT NULL,
+        folder_id varchar(100) NOT NULL,
+        PRIMARY KEY(category_id,folder_id)
+    );""" % db_prefix
+cursor = db.cursor()
+cursor.execute(sql)
+cursor.close()
+
+sql = """
     CREATE TABLE IF NOT EXISTS %s_album_content (
         album_id varchar(100) NOT NULL,
         content_id varchar(100) NOT NULL,
@@ -81,6 +91,22 @@ cursor.execute(sql)
 cursor.close()
 
 sql = """
+    CREATE TABLE IF NOT EXISTS %s_file (
+        file_id varchar(100) NOT NULL,
+        folder_id varchar(100) NOT NULL,
+        name varchar(300) NOT NULL,
+        file_type varchar(20) DEFAULT NULL,
+        storage_type varchar(20) DEFAULT NULL,
+        path VARCHAR(8190) NOT NULL DEFAULT '',
+        register_date DATETIME,
+        last_update_date DATETIME,
+        PRIMARY KEY(file_id,folder_id)
+    );""" % db_prefix
+cursor = db.cursor()
+cursor.execute(sql)
+cursor.close()
+
+sql = """
     CREATE TABLE IF NOT EXISTS %s_user (
         user_id varchar(100) PRIMARY KEY NOT NULL,
         password varchar(400) DEFAULT NULL,
@@ -103,12 +129,4 @@ cursor = db.cursor()
 cursor.execute(sql)
 cursor.close()
 
-#cursor = db.cursor()
-#sql = "select * from test WHERE id = %s"
-#val = 1;
-#cursor.execute(sql , ( val, ))
-#for ( id_name, id_val ) in cursor:
-#    print("{} = {} ".format( id_name, id_val ))
-#
-#cursor.close()
 db.close()

@@ -21,6 +21,8 @@ from app.interface.album import app_album
 from app.interface.common_category import app_common_category
 from app.interface.album_category import app_album_category
 from app.interface.album_content import app_album_content
+from app.interface.category import app_category
+from app.interface.file import app_file
 from lib.model.user.user import User
 from lib.model.user.user import UserID
 from lib.model.user.user_factory import UserFactory
@@ -48,6 +50,11 @@ application.register_blueprint(
 
 application.register_blueprint(
     app_common_category, url_prefix='/<string:user_id>/common_category')
+
+application.register_blueprint(
+    app_category, url_prefix='/<string:user_id>/category')
+
+application.register_blueprint(app_file, url_prefix='/<string:user_id>/file')
 
 #############################################################
 # user_loginがBlueprintに対応していないため、mainに記入する #
