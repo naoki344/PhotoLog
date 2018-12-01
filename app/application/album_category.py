@@ -25,7 +25,7 @@ class AlbumCategoryQueryService:
 
     def find_user_all(self, author_id: AuthorID):
         album_categorys = self.album_category_datasource.find_user_all(
-            author_id, CategoryType['ALBUM'])
+            author_id, CategoryType['ALBUM_CATEGORY'])
         user_album_category_list = CategoryList(album_categorys)
         return user_album_category_list
 
@@ -51,7 +51,7 @@ class AlbumCategoryCommandService:
         data['content'] = album_category
         album_content_factory = AlbumContentFactory()
         album_content = album_content_factory.create(data)
-        self.album_content_service.register(album_content)
+        self.album_content_command_service.register(album_content)
 
     def update(self, org_album_category: AlbumCategory,
                new_album_category: AlbumCategory):

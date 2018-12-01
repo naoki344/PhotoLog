@@ -99,6 +99,8 @@ sql = """
         storage_type varchar(20) DEFAULT NULL,
         path VARCHAR(8190) NOT NULL DEFAULT '',
         register_date DATETIME,
+        width int(11) NOT NULL,
+        height int(11) NOT NULL,
         last_update_date DATETIME,
         PRIMARY KEY(file_id,folder_id)
     );""" % db_prefix

@@ -17,10 +17,13 @@ class AlbumContent:
         self.delete_status = delete_status
 
     def to_dict(self):
+        content = self.content.to_dict()
+        content['content_id'] = self.content.content_id.value
         return {
             "album_id": self.album_id.value,
-            "content": self.content.to_dict(),
-            "delete_status": self.delete_status.name
+            "content_type": self.content.get_content_type(),
+            "delete_status": self.delete_status.name,
+            "content": content,
         }
 
     def can_delete(self):

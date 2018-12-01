@@ -25,8 +25,8 @@ Value Object : CategoryType
 
 
 class CategoryType(Enum):
-    COMMON = 1
-    ALBUM = 2
+    COMMON_CATEGORY = 1
+    ALBUM_CATEGORY = 2
 
 
 # カテゴリーを継承させるのであれば、CommonCategoryはCategory かつAlbumCategoryもCategoryでないといけない
@@ -47,9 +47,9 @@ class Category(Content, ABC):
     @staticmethod
     @abstractmethod
     def from_dict(dict_data: dict) -> 'Category':
-        if dict_data['category_type'] == 'COMMON':
+        if dict_data['category_type'] == 'COMMON_CATEGORY':
             return CommonCategory.from_dict(dict_data)
-        if dict_data['category_type'] == 'ALBUM':
+        if dict_data['category_type'] == 'ALBUM_CATEGORY':
             return AlbumCategory.from_dict(dict_data)
 
     def get_content_id(self):
@@ -67,6 +67,7 @@ class CommonCategory(Category):
         self.category_type = category_type
         self.info = info
         self.share = share
+        self.content_id = category_id
 
     def to_dict(self):
         return {
@@ -110,6 +111,7 @@ class AlbumCategory(Category):
         self.category_id = category_id
         self.category_type = category_type
         self.info = info
+        self.content_id = category_id
 
     def to_dict(self):
         return {

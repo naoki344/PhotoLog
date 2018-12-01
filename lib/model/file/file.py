@@ -33,6 +33,34 @@ class Location:
                         Path(dict_data['path']))
 
 
+class Width:
+    def __init__(self, width):
+        self.value = width
+
+
+class Height:
+    def __init__(self, height):
+        self.value = height
+
+
+class ShapeSize:
+    def __init__(self, width: Width, height: Height):
+        self.width = width
+        self.height = height
+
+    @staticmethod
+    def from_dict(dict_data):
+        return ShapeSize(
+            width=Width(dict_data['width']),
+            height=Height(dict_data['height']))
+
+    def to_dict(self):
+        return {
+            "width": self.width.value,
+            "height": self.height.value,
+        }
+
+
 class FileType(Enum):
     # 分類コード(1)  拡張子コード(001) # 表示形式コード(01)
     gif = 100101
@@ -161,12 +189,14 @@ class RegisterDate:
 
 class File:
     def __init__(self, file_id: FileID, name: Name, location: Location,
-                 file_type: FileType, register_date: RegisterDate,
+                 file_type: FileType, shape_size: ShapeSize,
+                 register_date: RegisterDate,
                  last_update_date: LastUpdateDate):
         self.file_id = file_id
         self.name = name
         self.location = location
         self.file_type = file_type
+        self.shape_size = shape_size
         self.register_date = register_date
         self.last_update_date = last_update_date
 
@@ -176,6 +206,7 @@ class File:
             'name': self.name.value,
             'url': self._get_url(),
             'file_type': self.file_type.name,
+            'shape_size': self.shape_size.to_dict(),
             'register_date': self.register_date.datetime_string(),
             'last_update_date': self.last_update_date.datetime_string(),
         }
@@ -187,6 +218,7 @@ class File:
             name=Name(dict_data['name']),
             location=Location.from_dict(dict_data),
             file_type=FileType[dict_data['file_type']],
+            shape_size=ShapeSize.from_dict(dict_data),
             register_date=RegisterDate(dict_data['register_date']),
             last_update_date=LastUpdateDate(dict_data['last_update_date']),
         )

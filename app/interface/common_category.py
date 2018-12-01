@@ -38,7 +38,7 @@ def common_category_index(user_id):
     if request.method == 'POST':
         post_data = request.json
         data = post_data.copy()
-        data['category_type'] = CategoryType.COMMON.name
+        data['category_type'] = CategoryType.COMMON_CATEGORY.name
         category_factory = CategoryFactory()
         common_category_obj = category_factory.create(data)
         if common_category_obj is False:

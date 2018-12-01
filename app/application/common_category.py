@@ -19,7 +19,7 @@ class CommonCategoryQueryService:
 
     def find_user_all(self, author_id: AuthorID):
         common_categorys = self.common_category_datasource.find_user_all(
-            author_id, CategoryType['COMMON'])
+            author_id, CategoryType['COMMON_CATEGORY'])
         user_common_category_list = CategoryList(common_categorys)
         return user_common_category_list
 

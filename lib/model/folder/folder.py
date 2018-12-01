@@ -23,6 +23,7 @@ class Folder(Content):
         self.folder_id = folder_id
         self.info = info
         self.share = share
+        self.content_id = folder_id
 
     def to_dict(self):
         return {

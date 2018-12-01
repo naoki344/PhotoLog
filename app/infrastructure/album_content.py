@@ -30,8 +30,8 @@ class AlbumContentDataSource:
             return None
         content_obj_list = []
         for album_content_rel in album_content_rel_list:
-            content_id = ContentID(album_content_rel['content_id'])
-            content_obj_list.append(self._to_album_content_obj(content_id))
+            content_obj_list.append(
+                self._to_album_content_obj(album_content_rel))
 
         data = {'album_id': album_id, 'content_obj_list': content_obj_list}
         return AlbumContentList.from_dict(data)
@@ -45,7 +45,7 @@ class AlbumContentDataSource:
             return None
         album_content_rel = album_content_rel_list[0]
         content_id = ContentID(album_content_rel['content_id'])
-        content_obj = self._to_album_content_obj(content_id)
+        content_obj = self._to_album_content_obj(album_content_rel)
         delete_status = DeleteStatus[album_content_rel['delete_status']]
 
         data = {
@@ -81,11 +81,15 @@ class AlbumContentDataSource:
 
         return True
 
-    # モデルに置き換える
-    def _to_album_content_obj(self, content_id: ContentID):
+    def _to_album_content_obj(self, album_content_rel):
+        content_id = ContentID(album_content_rel['content_id'])
         content_type = Content.check_content_type(content_id)
         if content_type == 'folder':
-            return self.folder_datasource.find(content_id)
-        if content_type == 'album_category' or content_type(
-        ) == 'common_category':
-            return self.category_datasource.find(content_id)
+            content = self.folder_datasource.find(content_id)
+        if content_type == 'album_category' or (
+                content_type == 'common_category'):
+            content = self.category_datasource.find(content_id)
+        return AlbumContent(
+            album_id=AlbumID(album_content_rel['album_id']),
+            content=content,
+            delete_status=DeleteStatus[album_content_rel['delete_status']])

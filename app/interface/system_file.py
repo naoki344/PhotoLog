@@ -12,6 +12,9 @@ from lib.model.file.file import File
 from lib.model.file.file import Location
 from lib.model.file.file import StorageType
 from lib.model.file.file import Path
+from lib.model.file.file import Width
+from lib.model.file.file import Height
+from lib.model.file.file import ShapeSize
 from lib.model.file.file import Name
 from lib.model.file.file_list import FileList
 

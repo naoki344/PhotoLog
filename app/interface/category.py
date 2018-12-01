@@ -74,3 +74,18 @@ def category(user_id, category_id, folder_id):
 
         txt = 'delete folder link'
         return txt.encode("UTF-8")
+
+
+@app_category.route('/<path:category_id>', methods=['GET'])
+def category_get(user_id, category_id):
+    if request.method == 'GET':
+        category_id = CategoryID(category_id)
+        category_query_service = CategoryQueryService()
+        category = category_query_service.find(category_id)
+        if category is None:
+            txt = 'category do not exist'
+            return txt.encode("UTF-8")
+
+        category_dict = category.to_dict()
+        json_txt = json.dumps(category_dict, indent=4)
+        return json_txt.encode("UTF-8")

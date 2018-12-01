@@ -6,6 +6,7 @@ from lib.model.file.file import File
 from lib.model.file.file import FileID
 from lib.model.file.file import FileType
 from lib.model.file.file import Location
+from lib.model.file.file import ShapeSize
 from lib.model.file.file import RegisterDate
 from lib.model.file.file import LastUpdateDate
 from lib.model.file.file import Name
@@ -13,7 +14,8 @@ from lib.model.file.file import Name
 
 class FileFactory:
     @staticmethod
-    def create_by_system(file_name_str: str, location: Location):
+    def create_by_system(file_name_str: str, location: Location,
+                         shape_size: ShapeSize):
         now_time = datetime.now()
         last_update_date = LastUpdateDate(now_time)
         register_date = RegisterDate(now_time)
@@ -25,5 +27,6 @@ class FileFactory:
             name=file_name,
             location=location,
             file_type=file_type,
+            shape_size=shape_size,
             register_date=register_date,
             last_update_date=last_update_date)

@@ -11,7 +11,7 @@ class FileDataSource:
         self.db_prefix = self.datasource.get_prefix()
 
     def register(self, folder, file):
-        sql = 'INSERT INTO {}_file(file_id,folder_id,name,file_type,storage_type,path,register_date,last_update_date) VALUES(%s,%s,%s,%s,%s,%s,%s,%s) ;'.format(
+        sql = 'INSERT INTO {}_file(file_id,folder_id,name,file_type,storage_type,path,width,height,register_date,last_update_date) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ;'.format(
             self.db_prefix)
         parameter = [
             file.file_id.value,
@@ -20,6 +20,8 @@ class FileDataSource:
             file.file_type.name,
             file.location.storage_type.name,
             file.location.path.value,
+            file.shape_size.width.value,
+            file.shape_size.height.value,
             file.register_date.value,
             file.last_update_date.value,
         ]

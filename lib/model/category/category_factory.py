@@ -21,9 +21,9 @@ class CategoryFactory(metaclass=ABCMeta):
     def create(dict_data) -> Category:
         if dict_data.get('category_type') is None:
             return False
-        if dict_data['category_type'] == CategoryType.COMMON.name:
+        if dict_data['category_type'] == CategoryType.COMMON_CATEGORY.name:
             return CommonCategoryFactory.create(dict_data)
-        if dict_data['category_type'] == CategoryType.ALBUM.name:
+        if dict_data['category_type'] == CategoryType.ALBUM_CATEGORY.name:
             return AlbumCategoryFactory.create(dict_data)
 
     @staticmethod
@@ -38,7 +38,7 @@ class CommonCategoryFactory(CategoryFactory):
             return False
 
         if dict_data.get('category_id') is None:
-            if dict_data['category_type'] != CategoryType.COMMON.name:
+            if dict_data['category_type'] != CategoryType.COMMON_CATEGORY.name:
                 return False
             dict_data['category_id'] = 'common_category-' + str(uuid.uuid4())
 
@@ -67,7 +67,7 @@ class AlbumCategoryFactory(CategoryFactory):
             return False
 
         if dict_data.get('category_id') is None:
-            if dict_data['category_type'] != CategoryType.ALBUM.name:
+            if dict_data['category_type'] != CategoryType.ALBUM_CATEGORY.name:
                 return False
             dict_data['category_id'] = 'album_category-' + str(uuid.uuid4())
 

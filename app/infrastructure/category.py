@@ -42,7 +42,7 @@ class CategoryDataSource:
         sql = 'INSERT INTO {}_category(category_id,category_type,author_id,name,description,register_date,last_update_date,release_status,thumbnail_url,delete_status,share_range,share_password) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ;'.format(
             self.db_prefix)
 
-        if category.category_type is CategoryType.COMMON:
+        if category.category_type is CategoryType.COMMON_CATEGORY:
             parameter = [
                 category.category_id.value,
                 category.category_type.name,
@@ -60,7 +60,7 @@ class CategoryDataSource:
             category_id = self.datasource.insert(sql, parameter, True)
             return category_id
 
-        if category.category_type is CategoryType.ALBUM:
+        if category.category_type is CategoryType.ALBUM_CATEGORY:
             parameter = [
                 category.category_id.value,
                 category.category_type.name,
@@ -83,7 +83,7 @@ class CategoryDataSource:
     def update(self, category: Category):
         sql = 'UPDATE {}_category SET category_type=%s,author_id=%s,name=%s,description=%s,register_date=%s,last_update_date=%s,release_status=%s,thumbnail_url=%s,delete_status=%s,share_range=%s,share_password=%s WHERE category_id=%s;'.format(
             self.db_prefix)
-        if category.category_type is CategoryType.COMMON:
+        if category.category_type is CategoryType.COMMON_CATEGORY:
             parameter = [
                 category.category_type.name,
                 category.info.author_id.value,
@@ -102,7 +102,7 @@ class CategoryDataSource:
             category_id = category.category_id
             return self.find(category_id)
 
-        if category.category_type is CategoryType.ALBUM:
+        if category.category_type is CategoryType.ALBUM_CATEGORY:
             parameter = [
                 category.category_type.name,
                 category.info.author_id.value,
