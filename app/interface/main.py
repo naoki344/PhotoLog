@@ -7,6 +7,7 @@ import string
 import sys
 
 import flask_login
+from flask_cors import CORS
 from flask import Flask
 from flask import redirect
 from flask import request
@@ -16,17 +17,45 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/../../')
 from app.application.user import UserFindService
 from app.application.user import UserRegisterService
 from app.interface.folder import app_folder
+from app.interface.album import app_album
+from app.interface.common_category import app_common_category
+from app.interface.album_category import app_album_category
+from app.interface.album_content import app_album_content
+from app.interface.category import app_category
+from app.interface.file import app_file
 from lib.model.user.user import User
 from lib.model.user.user import UserID
 from lib.model.user.user_factory import UserFactory
 
 application = Flask(__name__)
-application.register_blueprint(
-    app_folder, url_prefix='/photo_log/<string:user_id>/folder')
+CORS(application, supports_credentials=True)
+
 application.secret_key = "".join([
     random.choice(string.ascii_letters + string.digits + '_' + '-' + '!' +
                   '#' + '&') for i in range(64)
 ])
+
+application.register_blueprint(
+    app_folder, url_prefix='/<string:user_id>/folder')
+
+application.register_blueprint(app_album, url_prefix='/<string:user_id>/album')
+
+application.register_blueprint(
+    app_album_category,
+    url_prefix='/<string:user_id>/album/<string:album_id>/album_category/')
+
+application.register_blueprint(
+    app_album_content,
+    url_prefix='/<string:user_id>/album/<string:album_id>/album_content/')
+
+application.register_blueprint(
+    app_common_category, url_prefix='/<string:user_id>/common_category')
+
+application.register_blueprint(
+    app_category, url_prefix='/<string:user_id>/category')
+
+application.register_blueprint(
+    app_file, url_prefix='/<string:user_id>/file/strage')
 
 #############################################################
 # user_loginがBlueprintに対応していないため、mainに記入する #
@@ -35,7 +64,7 @@ login_manager = flask_login.LoginManager()
 login_manager.init_app(application)
 
 
-@application.route('/photo_log/user/login', methods=['GET', 'POST'])
+@application.route('/user/login', methods=['GET', 'POST'])
 def user_login():
     if request.method == 'GET':
         return '''

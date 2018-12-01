@@ -6,12 +6,10 @@ import os
 import sys
 
 from app.infrastructure.folder import FolderDataSource
-from lib.model.folder.folder import AuthorID
+from lib.model.info.info import AuthorID
 from lib.model.folder.folder import Folder
 from lib.model.folder.folder import FolderID
 from lib.model.folder.folder_list import FolderList
-
-sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/../..')
 
 
 class FolderQueryService:

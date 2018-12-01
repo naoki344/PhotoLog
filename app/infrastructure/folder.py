@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 
-from lib.model.folder.folder import AuthorID
-from lib.model.folder.folder import DeleteStatus
+from lib.model.info.info import AuthorID
+from lib.model.info.info import DeleteStatus
 from lib.model.folder.folder import Folder
 from lib.model.folder.folder import FolderID
-from lib.model.folder.folder_repository import FolderRepository
 
 from .datasource import DataSource
 
 
-class FolderDataSource(FolderRepository):
+class FolderDataSource():
     def __init__(self):
         self.datasource = DataSource()
         self.db_prefix = self.datasource.get_prefix()
@@ -39,14 +38,20 @@ class FolderDataSource(FolderRepository):
         return folder_obj
 
     def register(self, folder: Folder):
-        sql = 'INSERT INTO {}_folder(folder_id,author_id,name,description,register_date,last_update_date,release_status,share_range,share_url,thumbnail_url,delete_status) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ;'.format(
+        sql = 'INSERT INTO {}_folder(folder_id,author_id,name,description,register_date,last_update_date,release_status,thumbnail_url,delete_status,share_range,share_password) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ;'.format(
             self.db_prefix)
         parameter = [
-            folder.folder_id.value, folder.author_id.value, folder.name.value,
-            folder.description.value, folder.register_date.value,
-            folder.last_update_date.value, folder.release_status.name,
-            folder.share_range.name, folder.share_url.value,
-            folder.thumbnail_url.value, folder.delete_status.name
+            folder.folder_id.value,
+            folder.info.author_id.value,
+            folder.info.name.value,
+            folder.info.description.value,
+            folder.info.register_date.value,
+            folder.info.last_update_date.value,
+            folder.info.release_status.name,
+            folder.info.thumbnail_url.value,
+            folder.info.delete_status.name,
+            folder.share.share_range.name,
+            folder.share.share_password.value,
         ]
         folder_id = self.datasource.insert(sql, parameter, True)
 
@@ -56,12 +61,12 @@ class FolderDataSource(FolderRepository):
         sql = 'UPDATE {}_folder SET author_id=%s,name=%s,description=%s,register_date=%s,last_update_date=%s,release_status=%s,share_range=%s,share_url=%s,thumbnail_url=%s,delete_status=%s WHERE folder_id=%s;'.format(
             self.db_prefix)
         parameter = [
-            folder.author_id.value, folder.name.value,
-            folder.description.value, folder.register_date.value,
-            folder.last_update_date.value, folder.release_status.name,
-            folder.share_range.name, folder.share_url.value,
-            folder.thumbnail_url.value, folder.delete_status.name,
-            folder.folder_id.value
+            folder.info.author_id.value, folder.info.name.value,
+            folder.info.description.value, folder.info.register_date.value,
+            folder.info.last_update_date.value,
+            folder.info.release_status.name, folder.info.thumbnail_url.value,
+            folder.share.share_range.name, folder.share.share_url.value,
+            folder.info.delete_status.name, folder.folder_id.value
         ]
         self.datasource.update(sql, parameter, True)
         folder_id = folder.folder_id
