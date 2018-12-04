@@ -16,19 +16,21 @@ class Password:
     def __init__(self, value: str):
         self.value = value
 
-    def auth(self, imput_password):
+    def auth(self, password):
         if bcrypt.checkpw(
-                self.to_base64(imput_password), self.value.encode('utf-8')):
+                Password.to_base64(password.value),
+                self.value.encode('utf-8')):
             return True
         return False
 
     @staticmethod
     def create_hashpw(password):
-        hashed = bcrypt.hashpw(self.to_base64(password), bcrypt.gensalt())
+        hashed = bcrypt.hashpw(Password.to_base64(password), bcrypt.gensalt())
         hashed_pass = hashed.decode('utf-8')
-        return hashed_pass
+        return Password(hashed_pass)
 
-    def to_base64(self, password):
+    @staticmethod
+    def to_base64(password):
         return base64.b64encode(
             hashlib.sha256(password.encode('utf-8')).digest())
 
