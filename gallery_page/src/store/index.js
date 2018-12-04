@@ -7,7 +7,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     folder: Folder.FolderModel,
-    folder_form: Folder.FolderFromModel
+    folder_form: Folder.FolderFromModel,
+    album_content_list: []
   },
   mutations: {
     setFolder (state, folder) {

@@ -28,9 +28,9 @@ import axios from 'axios';
 export default {
   data () {
     return {
-      server_url: 'http://localhost:5000',
+      server_url: 'http://view.photolog.online',
       album: '',
-      album_content_list: ''
+      album_content_list: this.$store.album_content_list
     };
   },
   mounted () {
@@ -41,16 +41,16 @@ export default {
       }
     };
     axios
-      .get(this.server_url + '/miyoshi%40example.com/album/' + this.$route.params.album_id, config)
+      .get(this.server_url + '/trombone344%40gmail.com/album/' + this.$route.params.album_id, config)
       .then(response => {
         var album = response.data;
         this.album = album;
       });
     axios
-      .get(this.server_url + '/miyoshi%40example.com/album/' + this.$route.params.album_id + '/album_content/', config)
+      .get(this.server_url + '/trombone344%40gmail.com/album/' + this.$route.params.album_id + '/album_content/', config)
       .then(response => {
         var AlbumContentList = response.data;
-        this.album_content_list = AlbumContentList.content_list;
+        this.$store.album_content_list = AlbumContentList.content_list;
       });
   }
 };

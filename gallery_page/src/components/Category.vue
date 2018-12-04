@@ -26,7 +26,7 @@ import axios from 'axios';
 export default {
   data () {
     return {
-      server_url: 'http://localhost:5000',
+      server_url: 'http://view.photolog.online',
       category: '',
       folder_list: ''
     };
@@ -39,13 +39,13 @@ export default {
       }
     };
     axios
-      .get(this.server_url + '/miyoshi%40example.com/category/' + this.$route.params.category_id, config)
+      .get(this.server_url + '/trombone344%40gmail.com/category/' + this.$route.params.category_id, config)
       .then(response => {
         var category = response.data;
         this.category = category;
       });
     axios
-      .get(this.server_url + '/miyoshi%40example.com/category/' + this.$route.params.category_id + '/folder', config)
+      .get(this.server_url + '/trombone344%40gmail.com/category/' + this.$route.params.category_id + '/folder', config)
       .then(response => {
         var FolderList = response.data;
         this.folder_list = FolderList;
