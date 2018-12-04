@@ -53,7 +53,7 @@ class Folder(Content):
             new_folder.info = self.info.modify(dict_data['info'])
 
         if dict_data.get('share') is not None:
-            new_folder.info = self.share.modify(dict_data['share'])
+            new_folder.share = self.share.modify(dict_data['share'])
 
         return new_folder
 

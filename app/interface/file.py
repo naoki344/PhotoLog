@@ -29,3 +29,17 @@ def file_index(user_id, file_id):
         f = open(filename, 'rb')
         image = f.read()
         return Response(response=image, content_type='image/jpeg')
+
+
+@app_file.route('/thumb_small/<path:file_id>', methods=['GET'])
+# @flask_login.login_required
+def file_index(user_id, file_id):
+    folder_author_id = user_id
+    if request.method == 'GET':
+        file_query_service = FileQueryService()
+        file = file_query_service.find(FileID(file_id))
+        filename = '{}/thumb_small/{}'.format(file.location.path.value,
+                                              file.name.value)
+        f = open(filename, 'rb')
+        image = f.read()
+        return Response(response=image, content_type='image/jpeg')

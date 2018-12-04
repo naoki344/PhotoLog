@@ -224,4 +224,4 @@ class File:
         )
 
     def _get_url(self):
-        return '/file/strage/{}'.format(self.file_id.value)
+        return '/file/storage/{}'.format(self.file_id.value)

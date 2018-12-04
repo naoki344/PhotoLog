@@ -55,7 +55,7 @@ application.register_blueprint(
     app_category, url_prefix='/<string:user_id>/category')
 
 application.register_blueprint(
-    app_file, url_prefix='/<string:user_id>/file/strage')
+    app_file, url_prefix='/<string:user_id>/file/storage')
 
 #############################################################
 # user_loginがBlueprintに対応していないため、mainに記入する #

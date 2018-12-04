@@ -28,11 +28,14 @@ def RegisterFileInterface(dir_path):
     # ファイルの一覧を取得
     file_list = file_system_storage_service.find_by_location(location)
     # フォルダを作成
+    thumb_url = "http://view.photolog.online/trombone344%40gmail.com/file/storage/thumb_small/{}".format(
+        file_list.file_list[0].file_id.value)
     dirname = os.path.basename(dir_path)
     data = {
         "info": {
-            "author_id": "miyoshi@example.com",
+            "author_id": "trombone344@gmail.com",
             "name": dirname,
+            "thumbnail_url": thumb_url,
         },
         "share": {
             "share_range": "PRIVATE"
@@ -44,12 +47,12 @@ def RegisterFileInterface(dir_path):
         txt = 'folder can not create'
         return txt.encode("UTF-8")
 
+    print('start---------' + dirname + '------------------')
+    print('thumb_url=' + thumb_url)
+    print('folder_id=' + folder_obj.folder_id.value)
     folder_command_service = FolderCommandService()
     folder = folder_command_service.register(folder_obj)
 
     # ファイルを登録
     file_command_service.register_list(folder, file_list)
-
-
-RegisterFileInterface(
-    '/Users/miyoshi_naoki/pjct/PhotoLog/PhotoLog/file/sample01')
+    print('end----------------------------------------------')

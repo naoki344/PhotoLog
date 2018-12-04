@@ -58,14 +58,14 @@ class FolderDataSource():
         return True
 
     def update(self, folder: Folder):
-        sql = 'UPDATE {}_folder SET author_id=%s,name=%s,description=%s,register_date=%s,last_update_date=%s,release_status=%s,share_range=%s,share_url=%s,thumbnail_url=%s,delete_status=%s WHERE folder_id=%s;'.format(
+        sql = 'UPDATE {}_folder SET author_id=%s,name=%s,description=%s,register_date=%s,last_update_date=%s,release_status=%s,thumbnail_url=%s,share_range=%s,share_password=%s,delete_status=%s WHERE folder_id=%s;'.format(
             self.db_prefix)
         parameter = [
             folder.info.author_id.value, folder.info.name.value,
             folder.info.description.value, folder.info.register_date.value,
             folder.info.last_update_date.value,
             folder.info.release_status.name, folder.info.thumbnail_url.value,
-            folder.share.share_range.name, folder.share.share_url.value,
+            folder.share.share_range.name, folder.share.share_password.value,
             folder.info.delete_status.name, folder.folder_id.value
         ]
         self.datasource.update(sql, parameter, True)
