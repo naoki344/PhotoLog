@@ -127,7 +127,7 @@ def folder_file(album_id, content_id, folder_id):
 
 
 @app_album_content_gallery.route(
-    '/<path:content_id>/content/<path:folder_id>/file/<path:file_id>',
+    '/<path:content_id>/content/<path:folder_id>/file/storage/<path:file_id>',
     methods=['GET'])
 def file_index(album_id, content_id, folder_id, file_id):
     if request.method == 'GET':
@@ -140,7 +140,7 @@ def file_index(album_id, content_id, folder_id, file_id):
 
 
 @app_album_content_gallery.route(
-    '/<path:content_id>/content/<path:folder_id>/file/thumb_small/<path:file_id>',
+    '/<path:content_id>/content/<path:folder_id>/file/storage/thumb_small/<path:file_id>',
     methods=['GET'])
 def file_index_thumb(album_id, content_id, folder_id, file_id):
     if request.method == 'GET':
