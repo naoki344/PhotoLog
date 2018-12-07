@@ -23,8 +23,11 @@ from app.interface.album_category import app_album_category
 from app.interface.album_content import app_album_content
 from app.interface.category import app_category
 from app.interface.file import app_file
+from app.interface.gallery.album import app_album_gallery
+from app.interface.gallery.album_content import app_album_content_gallery
 from lib.model.user.user import User
 from lib.model.user.user import UserID
+from lib.model.user.user import Password
 from lib.model.user.user_factory import UserFactory
 
 application = Flask(__name__)
@@ -35,28 +38,28 @@ application.secret_key = "".join([
                   '#' + '&') for i in range(64)
 ])
 
-application.register_blueprint(
-    app_folder, url_prefix='/<string:user_id>/folder')
+application.register_blueprint(app_folder, url_prefix='/folder')
 
-application.register_blueprint(app_album, url_prefix='/<string:user_id>/album')
-
-application.register_blueprint(
-    app_album_category,
-    url_prefix='/<string:user_id>/album/<string:album_id>/album_category/')
+application.register_blueprint(app_album, url_prefix='/album')
 
 application.register_blueprint(
-    app_album_content,
-    url_prefix='/<string:user_id>/album/<string:album_id>/album_content/')
+    app_album_category, url_prefix='/album/<string:album_id>/album_category/')
 
 application.register_blueprint(
-    app_common_category, url_prefix='/<string:user_id>/common_category')
+    app_album_content, url_prefix='/album/<string:album_id>/album_content/')
 
 application.register_blueprint(
-    app_category, url_prefix='/<string:user_id>/category')
+    app_common_category, url_prefix='/common_category')
+
+application.register_blueprint(app_category, url_prefix='/category')
+
+application.register_blueprint(app_file, url_prefix='/file/storage')
+
+application.register_blueprint(app_album_gallery, url_prefix='/gallery/album')
 
 application.register_blueprint(
-    app_file, url_prefix='/<string:user_id>/file/storage')
-
+    app_album_content_gallery,
+    url_prefix='/gallery/album/<string:album_id>/album_content/')
 #############################################################
 # user_loginがBlueprintに対応していないため、mainに記入する #
 #############################################################
@@ -75,13 +78,19 @@ def user_login():
                </form>
                '''
 
-    user_id = request.form.get('user_id')
-    user = UserFindService().find(UserID(user_id))
+    #user_id = request.form.get('user_id')
+    post_data = request.json
+    data = post_data.copy()
+
+    user_id = UserID(data['user_id'])
+    password = Password(data['password'])
+
+    user = UserFindService().find(user_id)
     if user is None:
         return 'User Not Found'
 
-    if user.auth(request.form['password']):
-        flask_login.login_user(user)
+    if user.auth(password):
+        flask_login.login_user(user, True)
         return redirect(url_for('app_folder.folder_index', user_id=user_id))
 
     return 'Bad login'

@@ -23,14 +23,14 @@ app_folder = Blueprint('app_folder', __name__)
 
 
 @app_folder.route('/', methods=['GET', 'POST'])
-# @flask_login.login_required
-def folder_index(user_id):
+@flask_login.login_required
+def folder_index():
+    user = flask_login.current_user
+    author_id = AuthorID(user.user_id.value)
 
-    folder_author_id = user_id
     if request.method == 'GET':
         folder_query_service = FolderQueryService()
-        user_folder_list = folder_query_service.find_user_all(
-            AuthorID(folder_author_id))
+        user_folder_list = folder_query_service.find_user_all(author_id)
         folder_dict_list = user_folder_list.to_dict()
         json_txt = json.dumps(folder_dict_list, indent=4)
         return json_txt.encode("UTF-8")
@@ -38,6 +38,7 @@ def folder_index(user_id):
     if request.method == 'POST':
         post_data = request.json
         data = post_data.copy()
+        data['info']['author_id'] = user.user_id.value
         folder_factory = FolderFactory()
         folder_obj = folder_factory.create(data)
         if folder_obj is False:
@@ -53,9 +54,10 @@ def folder_index(user_id):
 
 
 @app_folder.route('/<path:folder_id>', methods=['GET', 'PUT', 'DELETE'])
-# @flask_login.login_required
-def folder(user_id, folder_id):
-    folder_author_id = user_id
+@flask_login.login_required
+def folder(folder_id):
+    user = flask_login.current_user
+    author_id = AuthorID(user.user_id.value)
     if request.method == 'GET':
         folder_query_service = FolderQueryService()
         folder_obj = folder_query_service.find(FolderID(folder_id))
@@ -103,8 +105,10 @@ def folder(user_id, folder_id):
 
 
 @app_folder.route('/<path:folder_id>/file', methods=['GET'])
-def folder_file(user_id, folder_id):
-    folder_author_id = user_id
+@flask_login.login_required
+def folder_file(folder_id):
+    user = flask_login.current_user
+    author_id = AuthorID(user.user_id.value)
     if request.method == 'GET':
         folder_query_service = FolderQueryService()
         folder_obj = folder_query_service.find(FolderID(folder_id))

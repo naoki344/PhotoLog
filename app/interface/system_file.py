@@ -56,3 +56,7 @@ def RegisterFileInterface(dir_path):
     # ファイルを登録
     file_command_service.register_list(folder, file_list)
     print('end----------------------------------------------')
+
+
+RegisterFileInterface(
+    '/Users/miyoshi_naoki/pjct/PhotoLog/PhotoLog/file/sample01/')

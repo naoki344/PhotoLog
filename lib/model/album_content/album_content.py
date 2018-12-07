@@ -26,6 +26,15 @@ class AlbumContent:
             "content": content,
         }
 
+    def to_dict_for_list(self):
+        content = self.content.to_dict()
+        content['content_id'] = self.content.content_id.value
+        return {
+            "content_type": self.content.get_content_type(),
+            "delete_status": self.delete_status.name,
+            "content": content,
+        }
+
     def can_delete(self):
         return True
 

@@ -19,9 +19,10 @@ app_file = Blueprint('app_file', __name__)
 
 
 @app_file.route('/<path:file_id>', methods=['GET'])
-# @flask_login.login_required
-def file_index(user_id, file_id):
-    folder_author_id = user_id
+@flask_login.login_required
+def file_index(file_id):
+    user = flask_login.current_user
+    author_id = AuthorID(user.user_id.value)
     if request.method == 'GET':
         file_query_service = FileQueryService()
         file = file_query_service.find(FileID(file_id))
@@ -32,9 +33,10 @@ def file_index(user_id, file_id):
 
 
 @app_file.route('/thumb_small/<path:file_id>', methods=['GET'])
-# @flask_login.login_required
-def file_index(user_id, file_id):
-    folder_author_id = user_id
+@flask_login.login_required
+def file_index_thumb(file_id):
+    user = flask_login.current_user
+    author_id = AuthorID(user.user_id.value)
     if request.method == 'GET':
         file_query_service = FileQueryService()
         file = file_query_service.find(FileID(file_id))

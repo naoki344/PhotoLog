@@ -1,4 +1,6 @@
 from app.infrastructure.album_content import AlbumContentDataSource
+from app.application.category import CategoryQueryService
+from lib.model.category.category import CategoryID
 from lib.model.content import Content
 from lib.model.content import ContentID
 from lib.model.album_content.album_content_list import AlbumContentList
@@ -21,6 +23,12 @@ class AlbumContentQueryService:
         if album_content is None:
             return None
         return album_content
+
+    def find_linked_content(self, album_id: AlbumID, content_id: ContentID):
+        content_list = self.album_content_datasource.find_linked_content(
+            album_id, content_id)
+
+        return content_list
 
 
 class AlbumContentCommandService:

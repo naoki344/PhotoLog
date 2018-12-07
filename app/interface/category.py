@@ -10,6 +10,7 @@ from lib.model.category.category import CategoryID
 from app.application.category import CategoryQueryService
 from app.application.category import CategoryCommandService
 from app.application.folder import FolderQueryService
+from lib.model.info.info import AuthorID
 from lib.model.folder.folder import FolderID
 
 app_category = Blueprint('app_category', __name__)
@@ -22,8 +23,10 @@ app_category = Blueprint('app_category', __name__)
 
 # カテゴリーに紐付けられたフォルダの一覧を取得できる /category/_id/folder/ - GET
 @app_category.route('/<path:category_id>/folder', methods=['GET'])
-# @flask_login.login_required
-def category_folder_index(user_id, category_id):
+@flask_login.login_required
+def category_folder_index(category_id):
+    user = flask_login.current_user
+    author_id = AuthorID(user.user_id.value)
     if request.method == 'GET':
         category_id = CategoryID(category_id)
         category_query_service = CategoryQueryService()
@@ -39,8 +42,10 @@ def category_folder_index(user_id, category_id):
 
 @app_category.route(
     '/<path:category_id>/folder/<path:folder_id>', methods=['POST', 'DELETE'])
-# @flask_login.login_required
-def category(user_id, category_id, folder_id):
+@flask_login.login_required
+def category(category_id, folder_id):
+    user = flask_login.current_user
+    author_id = AuthorID(user.user_id.value)
     category_id = CategoryID(category_id)
     folder_id = FolderID(folder_id)
     # カテゴリーにフォルダを紐付けることが出来る
@@ -77,7 +82,9 @@ def category(user_id, category_id, folder_id):
 
 
 @app_category.route('/<path:category_id>', methods=['GET'])
-def category_get(user_id, category_id):
+@flask_login.login_required
+def category_get(category_id):
+    user = flask_login.current_user
     if request.method == 'GET':
         category_id = CategoryID(category_id)
         category_query_service = CategoryQueryService()

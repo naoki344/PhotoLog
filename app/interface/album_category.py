@@ -24,15 +24,15 @@ app_album_category = Blueprint('app_album_category', __name__)
 
 
 @app_album_category.route('/', methods=['GET', 'POST'])
-# @flask_login.login_required
-def album_category_index(user_id, album_id):
-
-    album_category_author_id = user_id
+@flask_login.login_required
+def album_category_index(album_id):
+    user = flask_login.current_user
+    author_id = AuthorID(user.user_id.value)
     album_id = AlbumID(album_id)
     if request.method == 'GET':
         album_category_query_service = AlbumCategoryQueryService()
         user_album_category_list = album_category_query_service.find_user_all(
-            AuthorID(album_category_author_id))
+            author_id)
         album_category_dict_list = user_album_category_list.to_dict()
         json_txt = json.dumps(album_category_dict_list, indent=4)
         return json_txt.encode("UTF-8")
@@ -40,6 +40,7 @@ def album_category_index(user_id, album_id):
     if request.method == 'POST':
         post_data = request.json
         data = post_data.copy()
+        data['info']['author_id'] = user.user_id.value
         data['category_type'] = CategoryType.ALBUM_CATEGORY.name
         category_factory = CategoryFactory()
         album_category = category_factory.create(data)
@@ -57,8 +58,10 @@ def album_category_index(user_id, album_id):
 
 @app_album_category.route(
     '/<path:album_category_id>', methods=['GET', 'PUT', 'DELETE'])
-# @flask_login.login_required
-def album_category(user_id, album_id, album_category_id):
+@flask_login.login_required
+def album_category(album_id, album_category_id):
+    user = flask_login.current_user
+    author_id = AuthorID(user.user_id.value)
     album_id = AlbumID(album_id)
     if request.method == 'GET':
         album_category_query_service = AlbumCategoryQueryService()

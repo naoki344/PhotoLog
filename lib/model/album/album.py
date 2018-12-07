@@ -5,6 +5,8 @@ from enum import Enum
 
 from lib.model.info.info import Info
 from lib.model.share.share import Share
+from lib.model.user.user import User
+from lib.model.user.user import UserID
 '''
 Value Object : ID
 '''
@@ -34,6 +36,11 @@ class Album:
 
     def can_update(self):
         return True
+
+    def can_show_gallery(self, user: User):
+        if user.user_id.value == self.info.author_id.value:
+            return True
+        return False
 
     @staticmethod
     def from_dict(dict_data: dict) -> 'Album':

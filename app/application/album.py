@@ -10,6 +10,7 @@ from lib.model.info.info import AuthorID
 from lib.model.album.album import Album
 from lib.model.album.album import AlbumID
 from lib.model.album.album_list import AlbumList
+from lib.model.user.user import User
 
 
 class AlbumQueryService:
@@ -26,6 +27,14 @@ class AlbumQueryService:
         if album is None:
             return None
         return album
+
+    def find_for_gallery(self, album_id: AlbumID, user: User):
+        album = self.find(album_id)
+        if album is None:
+            return None
+        if album.can_show_gallery(user):
+            return album
+        return None
 
 
 class AlbumCommandService:

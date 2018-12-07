@@ -39,6 +39,6 @@ class ContentList():
     def to_dict(self):
         content_dict_list = []
         for content_obj in self.content_list:
-            content_dict_list.append(content_obj.to_dict())
+            content_dict_list.append(content_obj.to_dict_for_list())
 
         return content_dict_list

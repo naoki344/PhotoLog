@@ -22,14 +22,13 @@ app_album = Blueprint('app_album', __name__)
 
 
 @app_album.route('/', methods=['GET', 'POST'])
-# @flask_login.login_required
-def album_index(user_id):
-
-    album_author_id = user_id
+@flask_login.login_required
+def album_index():
+    user = flask_login.current_user
     if request.method == 'GET':
+        author_id = AuthorID(user.user_id.value)
         album_query_service = AlbumQueryService()
-        user_album_list = album_query_service.find_user_all(
-            AuthorID(album_author_id))
+        user_album_list = album_query_service.find_user_all(author_id)
         album_dict_list = user_album_list.to_dict()
         json_txt = json.dumps(album_dict_list, indent=4)
         return json_txt.encode("UTF-8")
@@ -37,6 +36,7 @@ def album_index(user_id):
     if request.method == 'POST':
         post_data = request.json
         data = post_data.copy()
+        data['info']['author_id'] = user.user_id.value
         album_factory = AlbumFactory()
         album_obj = album_factory.create(data)
         if album_obj is False:
@@ -52,9 +52,9 @@ def album_index(user_id):
 
 
 @app_album.route('/<path:album_id>', methods=['GET', 'PUT', 'DELETE'])
-# @flask_login.login_required
-def album(user_id, album_id):
-    album_author_id = user_id
+@flask_login.login_required
+def album(album_id):
+    user = flask_login.current_user
     if request.method == 'GET':
         album_query_service = AlbumQueryService()
         album_obj = album_query_service.find(AlbumID(album_id))

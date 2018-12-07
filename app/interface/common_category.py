@@ -23,14 +23,15 @@ app_common_category = Blueprint('app_common_category', __name__)
 
 
 @app_common_category.route('/', methods=['GET', 'POST'])
-# @flask_login.login_required
-def common_category_index(user_id):
+#@flask_login.login_required
+def common_category_index():
+    user = flask_login.current_user
+    author_id = AuthorID(user.user_id.value)
 
-    common_category_author_id = user_id
     if request.method == 'GET':
         common_category_query_service = CommonCategoryQueryService()
         user_common_category_list = common_category_query_service.find_user_all(
-            AuthorID(common_category_author_id))
+            author_id)
         common_category_dict_list = user_common_category_list.to_dict()
         json_txt = json.dumps(common_category_dict_list, indent=4)
         return json_txt.encode("UTF-8")
@@ -38,6 +39,7 @@ def common_category_index(user_id):
     if request.method == 'POST':
         post_data = request.json
         data = post_data.copy()
+        data['info']['author_id'] = user.user_id.value
         data['category_type'] = CategoryType.COMMON_CATEGORY.name
         category_factory = CategoryFactory()
         common_category_obj = category_factory.create(data)
@@ -56,9 +58,10 @@ def common_category_index(user_id):
 
 @app_common_category.route(
     '/<path:common_category_id>', methods=['GET', 'PUT', 'DELETE'])
-# @flask_login.login_required
-def common_category(user_id, common_category_id):
-    common_category_author_id = user_id
+@flask_login.login_required
+def common_category(common_category_id):
+    user = flask_login.current_user
+    author_id = AuthorID(user.user_id.value)
     if request.method == 'GET':
         common_category_query_service = CommonCategoryQueryService()
         common_category_obj = common_category_query_service.find(

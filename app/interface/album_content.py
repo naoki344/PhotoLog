@@ -27,9 +27,9 @@ app_album_content = Blueprint('app_album_content', __name__)
 
 
 @app_album_content.route('/', methods=['GET', 'POST'])
-# @flask_login.login_required
-def album_content_index(user_id, album_id):
-    album_content_author_id = user_id
+@flask_login.login_required
+def album_content_index(album_id):
+    user = flask_login.current_user
     album_id = AlbumID(album_id)
     if request.method == 'GET':
         album_content_query_service = AlbumContentQueryService()
@@ -42,6 +42,7 @@ def album_content_index(user_id, album_id):
     if request.method == 'POST':
         post_data = request.json
         data = post_data.copy()
+        data['info']['author_id'] = user.user_id.value
         content_id = ContentID(data['content_id'])
         content_command_service = _get_content_command_service(content_id)
         content = content_command_service.find(content_id)
@@ -63,8 +64,9 @@ def album_content_index(user_id, album_id):
 
 
 @app_album_content.route('/<path:content_id>', methods=['GET', 'DELETE'])
-# @flask_login.login_required
-def album_content(user_id, album_id, content_id):
+@flask_login.login_required
+def album_content(album_id, content_id):
+    user = flask_login.current_user
     content_id = ContentID(content_id)
     album_id = AlbumID(album_id)
     if request.method == 'GET':
