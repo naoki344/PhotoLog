@@ -1,17 +1,17 @@
 <template lang="html">
   <div class="centerx labelx">
 	  <el-row>
-  		<el-col style="padding: 10px" :xs="24" :sm="12" :md="8" :lg="6" :xl="6" v-for="folder in folder_list">
+  		<el-col style="padding: 10px" :xs="24" :sm="12" :md="8" :lg="6" :xl="6" v-for="content in content_list">
   		  <el-card :body-style="{ padding: '8px' }">
-			  <div class="card__image" :style="'background-image:url(' + folder.info.thumbnail_url + ');'">
-				<a :href="'/#/folder/' + folder.folder_id">link</a>
+			  <div class="card__image" :style="'background-image:url(' + content.content.info.thumbnail_url + ');'">
+				<a :href="'/#/folder/' + content.content.content_id">link</a>
 			  </div>
   		    <div style="padding: 5px;">
-			  <span class="card__title">{{ folder.info.name }}</span>
-			  <span class="card__description">{{ folder.info.description }}</span>
+			  <span class="card__title">{{ content.content.info.name }}</span>
+			  <span class="card__description">{{ content.content.info.description }}</span>
   		      <div class="bottom clearfix">
 				<el-tag size="small" >Folder</el-tag>
-  		        <time class="time">{{ folder.info.last_update_date }}</time>
+  		        <time class="time">{{ content.content.info.last_update_date }}</time>
   		      </div>
   		    </div>
   		  </el-card>
@@ -26,9 +26,10 @@ import axios from 'axios';
 export default {
   data () {
     return {
-      server_url: 'http://view.photolog.online',
+      // server_url: 'http://view.photolog.online',
+      server_url: 'http://localhost:5000',
       category: '',
-      folder_list: ''
+      content_list: ''
     };
   },
   mounted () {
@@ -39,16 +40,16 @@ export default {
       }
     };
     axios
-      .get(this.server_url + '/trombone344%40gmail.com/category/' + this.$route.params.category_id, config)
+      .get(this.server_url + '/gallery/album/' + this.$route.params.album_id + '/album_content/' + this.$route.params.content_id, config)
       .then(response => {
         var category = response.data;
         this.category = category;
       });
     axios
-      .get(this.server_url + '/trombone344%40gmail.com/category/' + this.$route.params.category_id + '/folder', config)
+      .get(this.server_url + '/gallery/album/' + this.$route.params.album_id + '/album_content/' + this.$route.params.content_id + '/content', config)
       .then(response => {
-        var FolderList = response.data;
-        this.folder_list = FolderList;
+        var ContentList = response.data;
+        this.content_list = ContentList.content_list;
       });
   }
 };

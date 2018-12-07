@@ -9,17 +9,17 @@ Vue.use(Router);
 export default new Router({
   routes: [
     {
-      path: '/album/:album_id',
+      path: '/gallery/album/:album_id',
       name: 'Album',
       component: Album
     },
     {
-      path: '/category/:category_id',
+      path: '/gallery/album/:album_id/album_content/:content_id',
       name: 'Category',
       component: Category
     },
     {
-      path: '/Folder/:folder_id',
+      path: '/gallery/album/:album_id/album_content/:content_id/content/:folder_id',
       name: 'Folder',
       component: Folder
     }
