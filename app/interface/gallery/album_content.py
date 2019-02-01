@@ -33,7 +33,7 @@ app_album_content_gallery = Blueprint('app_album_content_gallery', __name__)
 
 # album_idに紐づくコンテンツ一覧を返す
 @app_album_content_gallery.route('/', methods=['GET'])
-#@flask_login.login_required
+@flask_login.login_required
 def album_content_index(album_id):
     album_id = AlbumID(album_id)
     if request.method == 'GET':

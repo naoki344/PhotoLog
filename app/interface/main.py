@@ -23,6 +23,7 @@ from app.interface.album_category import app_album_category
 from app.interface.album_content import app_album_content
 from app.interface.category import app_category
 from app.interface.file import app_file
+from app.interface.gallery.static_file import app_static
 from app.interface.gallery.album import app_album_gallery
 from app.interface.gallery.album_content import app_album_content_gallery
 from lib.model.user.user import User
@@ -30,7 +31,7 @@ from lib.model.user.user import UserID
 from lib.model.user.user import Password
 from lib.model.user.user_factory import UserFactory
 
-application = Flask(__name__)
+application = Flask(__name__, static_folder=None)
 CORS(application, supports_credentials=True)
 
 application.secret_key = "".join([
@@ -60,6 +61,8 @@ application.register_blueprint(app_album_gallery, url_prefix='/gallery/album')
 application.register_blueprint(
     app_album_content_gallery,
     url_prefix='/gallery/album/<string:album_id>/album_content/')
+
+application.register_blueprint(app_static, url_prefix='/')
 #############################################################
 # user_loginがBlueprintに対応していないため、mainに記入する #
 #############################################################
@@ -78,9 +81,11 @@ def user_login():
                </form>
                '''
 
-    #user_id = request.form.get('user_id')
-    post_data = request.json
-    data = post_data.copy()
+    data = {}
+    data['user_id'] = request.form.get('user_id')
+    data['password'] = request.form.get('password')
+    #post_data = request.json
+    #data = post_data.copy()
 
     user_id = UserID(data['user_id'])
     password = Password(data['password'])
@@ -91,12 +96,14 @@ def user_login():
 
     if user.auth(password):
         flask_login.login_user(user, True)
-        return redirect(url_for('app_folder.folder_index', user_id=user_id))
+        return redirect(
+            '/#/gallery/album/album-11915f4a-330c-4359-aad7-6e1d92a092fd')
+        #return redirect(url_for('app_folder.folder_index', user_id=user_id.value))
 
     return 'Bad login'
 
 
-@application.route('/photo_log/user/register', methods=['GET', 'POST'])
+@application.route('/user/register', methods=['GET', 'POST'])
 def user_register():
     request_dict = request.json
 

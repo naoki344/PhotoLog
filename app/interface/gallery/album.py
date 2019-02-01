@@ -19,12 +19,11 @@ app_album_gallery = Blueprint('app_album_gallery', __name__)
 
 
 @app_album_gallery.route('/', methods=['GET', 'POST'])
-#@flask_login.login_required
+@flask_login.login_required
 def album_gallery_index():
-    #user = flask_login.current_user
+    user = flask_login.current_user
     if request.method == 'GET':
-        #author_id = AuthorID(user.user_id.value)
-        author_id = AuthorID('trombone344@gmail.com')
+        author_id = AuthorID(user.user_id.value)
         album_query_service = AlbumQueryService()
         user_album_list = album_query_service.find_user_all(author_id)
         album_dict_list = user_album_list.to_dict()
@@ -33,9 +32,9 @@ def album_gallery_index():
 
 
 @app_album_gallery.route('/<path:album_id>', methods=['GET', 'PUT', 'DELETE'])
-#@flask_login.login_required
+@flask_login.login_required
 def album(album_id):
-    #user = flask_login.current_user
+    user = flask_login.current_user
     if request.method == 'GET':
         album_query_service = AlbumQueryService()
         album_obj = album_query_service.find(AlbumID(album_id))

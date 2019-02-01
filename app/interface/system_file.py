@@ -28,7 +28,7 @@ def RegisterFileInterface(dir_path):
     # ファイルの一覧を取得
     file_list = file_system_storage_service.find_by_location(location)
     # フォルダを作成
-    thumb_url = "http://view.photolog.online/trombone344%40gmail.com/file/storage/thumb_small/{}".format(
+    thumb_url = "http://view.photolog.online/file/storage/thumb_small/{}".format(
         file_list.file_list[0].file_id.value)
     dirname = os.path.basename(dir_path)
     data = {

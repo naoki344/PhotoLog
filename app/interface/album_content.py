@@ -42,7 +42,6 @@ def album_content_index(album_id):
     if request.method == 'POST':
         post_data = request.json
         data = post_data.copy()
-        data['info']['author_id'] = user.user_id.value
         content_id = ContentID(data['content_id'])
         content_command_service = _get_content_command_service(content_id)
         content = content_command_service.find(content_id)
