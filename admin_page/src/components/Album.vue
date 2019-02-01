@@ -3,23 +3,24 @@
     <el-form ref="form" :model="album_form" label-width="160px">
         <h4>アルバム情報の更新</h4>
         <el-form-item label="アルバムID"><el-input placeholder="Please input" v-model="album_form.album_id" :disabled="true"></el-input></el-form-item>
-        <el-form-item label="アルバム名"><el-input placeholder="Please input" v-model="album_form.name"></el-input></el-form-item>
-        <el-form-item label="説明"><el-input type="textarea" v-model="album_form.description"></el-input></el-form-item>
+        <el-form-item label="アルバム名"><el-input placeholder="Please input" v-model="album_form.info.name"></el-input></el-form-item>
+        <el-form-item label="説明"><el-input type="textarea" v-model="album_form.info.description"></el-input></el-form-item>
         <el-form-item label="公開状態">
-            <el-radio-group v-model="album_form.release_status">
+            <el-radio-group v-model="album_form.info.release_status">
                   <el-radio label="OPEN">公開</el-radio>
                   <el-radio label="CLOSE">非公開</el-radio>
             </el-radio-group>
         </el-form-item>
         <el-form-item label="公開範囲">
-            <el-radio-group v-model="album_form.share_range">
+            <el-radio-group v-model="album_form.share.share_range">
                   <el-radio label="PRIVATE">プライベート</el-radio>
                   <el-radio label="PUBLIC">パブリック</el-radio>
                   <el-radio label="PASSFRASE">パスワード認証</el-radio>
             </el-radio-group>
         </el-form-item>
-        <el-form-item label="公開URL"><el-input placeholder="Please input" v-model="album_form.share_url" :disabled="true"></el-input></el-form-item>
-        <el-form-item label="サムネイル画像URL"><el-input placeholder="Please input" v-model="album_form.thumbnail_url"></el-input></el-form-item>
+        <el-form-item label="公開URL"><el-input placeholder="Please input" v-model="album_form.share.share_password" :disabled="true"></el-input></el-form-item>
+        <el-form-item label="公開PASSWORD"><el-input placeholder="Please input" v-model="album_form.share.share_password"></el-input></el-form-item>
+        <el-form-item label="サムネイル画像URL"><el-input placeholder="Please input" v-model="album_form.info.thumbnail_url"></el-input></el-form-item>
         <el-form-item>
             <el-button type="primary" @click="onSubmit">更新</el-button>
         </el-form-item>
@@ -52,7 +53,7 @@ export default {
       }
     };
     axios
-      .get(this.server_url + '/miyoshi%40example.com/album/', config)
+      .get(this.server_url + '/album/', config)
       .then(response => {
         var albums = response.data;
         this.album_form = albums[0];
@@ -64,7 +65,7 @@ export default {
     onSubmit () {
       axios
         .put(
-          this.server_url + '/miyoshi%40example.com/album/' + this.album_id,
+          this.server_url + '/album/' + this.album_id,
           this.album_form
         )
         .then(response => {
