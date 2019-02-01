@@ -11,6 +11,7 @@ from app.util import get_db_config
 from app.util import get_db_prefix
 
 config = get_db_config()
+print(config)
 db_prefix = get_db_prefix()
 
 db = mysql.connector.connect(**config)
