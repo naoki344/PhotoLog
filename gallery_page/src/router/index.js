@@ -14,12 +14,12 @@ export default new Router({
       component: Album
     },
     {
-      path: '/gallery/album/:album_id/album_content/:content_id',
+      path: '/gallery/album/:album_id/album_content/:album_content_id',
       name: 'Category',
       component: Category
     },
     {
-      path: '/gallery/album/:album_id/album_content/:content_id/content/:folder_id',
+      path: '/gallery/album/:album_id/album_content/:album_content_id/content/:album_content_folder_id',
       name: 'Folder',
       component: Folder
     }

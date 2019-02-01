@@ -1,10 +1,10 @@
 <template lang="html">
   <div class="centerx labelx">
 	  <el-row>
-  		<el-col style="padding: 10px" :xs="24" :sm="12" :md="8" :lg="6" :xl="6" v-for="content in content_list">
+  		<el-col style="padding: 10px" :xs="24" :sm="12" :md="8" :lg="6" :xl="6" v-for="content in category_content_list[album_content_id]">
   		  <el-card :body-style="{ padding: '8px' }">
 			  <div class="card__image" :style="'background-image:url(' + content.content.info.thumbnail_url + ');'">
-				<a :href="'/#/folder/' + content.content.content_id">link</a>
+				<a :href="url_gallery_album_content + '/content/' + content.content.content_id">link</a>
 			  </div>
   		    <div style="padding: 5px;">
 			  <span class="card__title">{{ content.content.info.name }}</span>
@@ -19,39 +19,29 @@
 	  </el-row>
   </div>
 </template>
-
 <script>
-import axios from 'axios';
+import { mapState } from 'vuex';
 
 export default {
   data () {
     return {
-      // server_url: 'http://view.photolog.online',
-      server_url: 'http://localhost:5000',
-      category: '',
-      content_list: ''
     };
   },
-  mounted () {
-    var config = {
-      headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
-        'Access-Control-Allow-Origin': '*'
-      }
+  created () {
+    this.album_content_id = this.$route.params.album_content_id;
+    var target = {
+      album_id: this.$route.params.album_id,
+      album_content_id: this.$route.params.album_content_id,
+      album_content_folder_id: ''
     };
-    axios
-      .get(this.server_url + '/gallery/album/' + this.$route.params.album_id + '/album_content/' + this.$route.params.content_id, config)
-      .then(response => {
-        var category = response.data;
-        this.category = category;
-      });
-    axios
-      .get(this.server_url + '/gallery/album/' + this.$route.params.album_id + '/album_content/' + this.$route.params.content_id + '/content', config)
-      .then(response => {
-        var ContentList = response.data;
-        this.content_list = ContentList.content_list;
-      });
-  }
+    this.$store.commit('SetTarget', target);
+    this.$store.commit('SetCategoryContentList');
+    this.$store.commit('SetGalleryAlbumContentUrl');
+  },
+  computed: mapState([
+    'category_content_list',
+    'url_gallery_album_content'
+  ])
 };
 </script>
 

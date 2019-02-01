@@ -4,8 +4,8 @@
   		<el-col style="padding: 10px" :xs="24" :sm="12" :md="8" :lg="6" :xl="6" v-for="album_content in album_content_list">
   		  <el-card :body-style="{ padding: '8px' }">
 			  <div class="card__image" :style="'background-image:url(' + album_content.content.info.thumbnail_url + ');'">
-				<a v-if="album_content.content_type === 'Category'" :href="album_url + '/album_content/' + album_content.content.content_id">link</a>
-				<a v-else-if="album_content.content_type === 'Folder'" :href="album_url + '/album_content/' + album_content.content.content_id + '/content/' + album_content.content.content_id">link</a>
+				<a v-if="album_content.content_type === 'Category'" :href="url_gallery_album + '/album_content/' + album_content.content.content_id">link</a>
+				<a v-else-if="album_content.content_type === 'Folder'" :href="url_gallery_album + '/album_content/' + album_content.content.content_id + '/content/' + album_content.content.content_id">link</a>
 			  </div>
   		    <div style="padding: 5px;">
 			  <span class="card__title">{{ album_content.content.info.name }}</span>
@@ -23,39 +23,27 @@
 </template>
 
 <script>
-import axios from 'axios';
+import { mapState } from 'vuex';
 
 export default {
   data () {
     return {
-      // server_url: 'http://view.photolog.online',
-      server_url: 'http://localhost:5000',
-      album: '',
-      album_url: '',
-      album_content_list: []
     };
   },
   mounted () {
-    var config = {
-      headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
-        'Access-Control-Allow-Origin': '*'
-      }
+    var target = {
+      album_id: this.$route.params.album_id,
+      album_content_id: '',
+      album_content_folder_id: ''
     };
-    axios
-      .get(this.server_url + '/gallery/album/' + this.$route.params.album_id, config)
-      .then(response => {
-        var album = response.data;
-        this.album = album;
-        this.album_url = '/#/gallery/album/' + this.$route.params.album_id;
-      });
-    axios
-      .get(this.server_url + '/gallery/album/' + this.$route.params.album_id + '/album_content/', config)
-      .then(response => {
-        var AlbumContentList = response.data;
-        this.album_content_list = AlbumContentList.content_list;
-      });
-  }
+    this.$store.commit('SetTarget', target);
+    this.$store.commit('SetAlbumContentList');
+    this.$store.commit('SetGalleryAlbumUrl');
+  },
+  computed: mapState([
+    'album_content_list',
+    'url_gallery_album'
+  ])
 };
 </script>
 

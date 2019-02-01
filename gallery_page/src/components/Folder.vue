@@ -1,58 +1,36 @@
 <template lang="html">
   <div class="centerx labelx">
 	  <el-row>
-		<vue-picture-swipe :items="image_list"></vue-picture-swipe>
-  		<!--el-col style="padding: 5px" :xs="24" :sm="12" :md="8" :lg="6" :xl="6" v-for="file in file_list">
-			<img class="content__image" :src="'http://localhost:5000' + file.url">
-  		</el-col-->
+		<vue-picture-swipe :items="image_list[album_content_folder_id]"></vue-picture-swipe>
 	  </el-row>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import { mapState } from 'vuex';
 
 export default {
   data () {
     return {
-      // server_url: 'http://view.photolog.online',
-      server_url: 'http://localhost:5000',
-      folder: '',
-      file_list: '',
-      content_url: '',
-      image_list: []
     };
   },
-  mounted () {
-    var config = {
-      headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
-        'Access-Control-Allow-Origin': '*'
-      }
+  created () {
+    var target = {
+      album_id: this.$route.params.album_id,
+      album_content_id: this.$route.params.album_content_id,
+      album_content_folder_id: this.$route.params.album_content_folder_id
     };
-    axios
-      .get(this.server_url + '/gallery/album/' + this.$route.params.album_id + '/album_content/' + this.$route.params.content_id + '/content/' + this.$route.params.folder_id, config)
-      .then(response => {
-        var folder = response.data;
-        this.folder = folder;
-      });
-    axios
-      .get(this.server_url + '/gallery/album/' + this.$route.params.album_id + '/album_content/' + this.$route.params.content_id + '/content/' + this.$route.params.folder_id + '/file', config)
-      .then(response => {
-        var FileList = response.data;
-        this.content_url = this.server_url + '/gallery/album/' + this.$route.params.album_id + '/album_content/' + this.$route.params.content_id + '/content/' + this.$route.params.folder_id;
-        this.file_list = FileList;
-        FileList.forEach((file) => {
-          var img = {
-            src: this.server_url + file.url,
-            thumbnail: this.content_url + file.url,
-            w: file.shape_size.width,
-            h: file.shape_size.height,
-            alt: 'some numbers on a grey background' // optional alt attribute for thumbnail image<Paste>
-          };
-          this.image_list.push(img);
-        });
-      });
+    this.$store.commit('SetTarget', target);
+    this.$store.commit('SetGalleryFolderUrl');
+    this.$store.commit('GetContentFileList');
+  },
+  computed: {
+    ...mapState([
+      'album_content_list',
+      'album_content_folder_id',
+      'url_gallery_album',
+      'image_list'
+    ])
   }
 };
 </script>

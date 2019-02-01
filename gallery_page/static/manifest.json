@@ -1,6 +1,6 @@
 {
-  "name": "photo_log",
-  "short_name": "photo_log",
+  "name": "PhotoLog",
+  "short_name": "PhotoLog",
   "icons": [
     {
       "src": "/static/img/icons/android-chrome-192x192.png",
@@ -13,7 +13,7 @@
       "type": "image/png"
     }
   ],
-  "start_url": "/index.html",
+  "start_url": "/#/gallery/album/album-1647ebdd-59d5-4012-8c45-82a741252b89/",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#4DBA87"
