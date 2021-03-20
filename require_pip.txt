@@ -41,7 +41,7 @@ idna==2.7
 invoke==1.2.0
 isort==4.3.4
 itsdangerous==1.1.0
-Jinja2==2.10
+Jinja2==2.11.3
 jinja2-s3loader==0.3.0
 jmespath==0.9.3
 MarkupSafe==1.1.0
